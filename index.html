@@ -31,20 +31,16 @@
     </table>
 
     <script>
-        // Google Sheet ID
-        const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0"; // 替換成你的 Sheet ID
-        const sheetName = "工作表1"; // 替換成你的工作表名稱
-        const apiKey = ""; // 如果需要 API 金鑰 (可選)
+        // Google Sheets 的公開 CSV URL
+        const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0"; // Google Sheet 的 ID
+        const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv`;
 
-        // Google Sheets API URL
-        const apiURL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${sheetName}?key=${apiKey}`;
-
-        // Fetch Google Sheets data
-        async function fetchGoogleSheet() {
+        // 讀取 CSV 並顯示表格
+        async function fetchGoogleSheetCSV() {
             try {
-                const response = await fetch(apiURL);
-                const data = await response.json();
-                const rows = data.values;
+                const response = await fetch(sheetCSVUrl);
+                const csvText = await response.text();
+                const rows = csvText.split("\n").map(row => row.split(","));
 
                 if (rows && rows.length > 0) {
                     // 建立表頭
@@ -74,7 +70,7 @@
         }
 
         // 初始化
-        fetchGoogleSheet();
+        fetchGoogleSheetCSV();
     </script>
 </body>
 </html>
