@@ -58,7 +58,7 @@
                         const tr = document.createElement("tr");
                         row.forEach(cell => {
                             const td = document.createElement("td");
-                            td.textContent = cell || ""; // 防止空值
+                            td.textContent = cell.replace(/"/g, "").trim(); // 去除多餘的引號和空白
                             tr.appendChild(td);
                         });
                         tableBody.appendChild(tr);
