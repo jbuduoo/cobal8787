@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星球毀滅遊戲</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Planet {
+            constructor(x, y, radius, color) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+
+        let planets = [];
+
+        function createPlanet() {
+            const radius = Math.random() * 30 + 20;
+            const x = Math.random() * (canvas.width - radius * 2) + radius;
+            const y = Math.random() * (canvas.height - radius * 2) + radius;
+            const color = `hsl(${Math.random() * 360}, 70%, 50%)`;
+            planets.push(new Planet(x, y, radius, color));
+        }
+
+        function drawPlanets() {
+            planets.forEach(planet => planet.draw());
+        }
+
+        function detectClick(event) {
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+
+            planets = planets.filter(planet => {
+                const distance = Math.sqrt((mouseX - planet.x) ** 2 + (mouseY - planet.y) ** 2);
+                return distance > planet.radius;
+            });
+
+            if (planets.length === 0) {
+                alert('你毀滅了所有的星球！');
+                createRandomPlanets();
+            }
+        }
+
+        function createRandomPlanets() {
+            planets = [];
+            for (let i = 0; i < 10; i++) {
+                createPlanet();
+            }
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlanets();
+            requestAnimationFrame(gameLoop);
+        }
+
+        canvas.addEventListener('click', detectClick);
+
+        createRandomPlanets();
+        gameLoop();
+    </script>
+</body>
+</html>
