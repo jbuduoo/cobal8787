@@ -44,12 +44,11 @@
 
                 if (rows && rows.length > 0) {
                     // 建立表頭
-                    const headerRow = rows[0];
+					const headerRow = rows[0].map(cell => cell.replace(/"/g, "").trim());
                     const tableHeader = document.getElementById("table-header");
                     headerRow.forEach(header => {
                         const th = document.createElement("th");
                         th.textContent = header;
-						th.textContent = cell.replace(/"/g, "").trim(); // 去除多餘的引號和空白
                         tableHeader.appendChild(th);
                     });
 
