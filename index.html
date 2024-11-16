@@ -49,6 +49,7 @@
                     headerRow.forEach(header => {
                         const th = document.createElement("th");
                         th.textContent = header;
+						th.textContent = cell.replace(/"/g, "").trim(); // 去除多餘的引號和空白
                         tableHeader.appendChild(th);
                     });
 
