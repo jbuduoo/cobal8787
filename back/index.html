@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets 表格顯示</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Google Sheets 資料表格</h1>
+    <table id="data-table">
+        <thead>
+            <tr id="table-header"></tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+
+    <script>
+        // Google Sheets 的公開 CSV URL
+        const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0"; // Google Sheet 的 ID
+        const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv`;
+
+        // 讀取 CSV 並顯示表格
+        async function fetchGoogleSheetCSV() {
+            try {
+                const response = await fetch(sheetCSVUrl);
+                const csvText = await response.text();
+                const rows = csvText.split("\n").map(row => row.split(","));
+
+                if (rows && rows.length > 0) {
+                    // 建立表頭
+					const headerRow = rows[0].map(cell => cell.replace(/"/g, "").trim());
+                    const tableHeader = document.getElementById("table-header");
+                    headerRow.forEach(header => {
+                        const th = document.createElement("th");
+                        th.textContent = header;
+                        tableHeader.appendChild(th);
+                    });
+
+                    // 建立表格內容
+                    const tableBody = document.getElementById("table-body");
+                    rows.slice(1).forEach(row => {
+                        const tr = document.createElement("tr");
+                        row.forEach(cell => {
+                            const td = document.createElement("td");
+                            td.textContent = cell.replace(/"/g, "").trim(); // 去除多餘的引號和空白
+                            tr.appendChild(td);
+                        });
+                        tableBody.appendChild(tr);
+                    });
+                }
+            } catch (error) {
+                console.error("讀取 Google Sheets 時發生錯誤:", error);
+            }
+        }
+
+        // 初始化
+        fetchGoogleSheetCSV();
+    </script>
+</body>
+</html>
