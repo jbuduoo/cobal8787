@@ -15,24 +15,19 @@
             margin-top: 20px;
         }
         .customer-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 10px 0;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            width: 80%;
-            background-color: #f9f9f9;
+            margin: 5px 0; /* 將上下的外部間距縮小到5px */
+            padding: 10px; /* 可視需求縮小內部間距 */
         }
         .customer-card img {
             width: 140px; /* 調整圖片寬度 */
             height: 100px; /* 調整圖片高度 */
             border-radius: 2px; /* 保持圓角設置 */
             cursor: pointer; /* 滑鼠變為點擊手型 */
+            margin: 0; /* 移除圖片的上下外部間距 */
         }
         .details {
-            margin-left: 30px; /* 原本是 20px，可以適度增加 */
+            margin-left: 10px; /* 控制圖片與文字的水平間距 */
+            text-align: left;
         }
 
         .details a {
