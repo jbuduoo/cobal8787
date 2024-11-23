@@ -11,21 +11,19 @@
         }
         .button-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px; /* 增加按钮之间的间距 */
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* 自動調整按鈕列數 */
+            gap: 10px; /* 按鈕間距 */
             justify-items: center;
-            margin-top: 20px;
+            margin-top: 10px;
         }
         button {
-            width: 160px;    /* 固定按钮宽度 */
-            height: 60px;    /* 固定按钮高度 */
-            font-size: 18px; /* 增大字体 */
+            width: 20%; /* 相對寬度，螢幕寬度的 20% */
+            height: 15vh; /* 相對高度，螢幕高度的 8% */
+            font-size: 2vw; /* 文字大小隨螢幕寬度調整 */
             border: 1px solid #ddd;
             border-radius: 8px;
             cursor: pointer;
-            display: flex;           /* 使文本在按钮内居中 */
-            justify-content: center; /* 水平居中 */
-            align-items: center;     /* 垂直居中 */
+            padding: 0;
         }
         button:disabled {
             background-color: #ccc;
@@ -56,7 +54,9 @@
 
                 // 按鈕的動作（可以按需求修改）
                 button.onclick = () => {
-                    alert(`執行操作：${columns[colIndex - 6]}`);
+                    if (!button.disabled) {
+                        alert(`執行操作：${columns[colIndex - 6]}`);
+                    }
                 };
 
                 buttonContainer.appendChild(button);
