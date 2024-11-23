@@ -37,8 +37,7 @@
     </div>
 
     <script>
-
-        async function fetchGoogleSheetCSV() {
+        function fetchGoogleSheetCSV() {
             // G 到 M 欄的對應標題
             const columns = ["叫布", "裁布", "物料", "LOGO工法", "車工", "打扣/整燙", "清點+裝箱"];
             const buttonContainer = document.getElementById("button-container");
@@ -60,8 +59,7 @@
 
                 buttonContainer.appendChild(button);
             }
-        )
-
+        }
 
         fetchGoogleSheetCSV();
     </script>
