@@ -15,24 +15,32 @@
             margin-top: 20px;
         }
         .customer-card {
-            margin: 5px 0; /* 將上下的外部間距縮小到5px */
-            padding: 10px; /* 可視需求縮小內部間距 */
+            display: flex; /* 使用 flex 排列 */
+            align-items: center; /* 垂直方向居中對齊 */
+            justify-content: space-between; /* 確保圖片和文字兩端對齊 */
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 80%;
+            background-color: #f9f9f9;
         }
         .customer-card img {
-            width: 140px; /* 調整圖片寬度 */
-            height: 100px; /* 調整圖片高度 */
-            border-radius: 2px; /* 保持圓角設置 */
-            cursor: pointer; /* 滑鼠變為點擊手型 */
-            margin: 0; /* 移除圖片的上下外部間距 */
+            width: 140px;
+            height: 100px;
+            border-radius: 2px;
+            cursor: pointer;
+            margin: 0;
         }
         .details {
-            margin-left: 10px; /* 控制圖片與文字的水平間距 */
-        }
-
-        .details a {
-            text-decoration: none;
+            margin-left: auto; /* 將文字推到右側 */
+            text-align: left;
             color: #007bff;
             font-size: 18px;
+        }
+        .details a {
+            text-decoration: none;
+            color: inherit;
         }
         .big-image-modal {
             position: fixed;
@@ -71,9 +79,7 @@
         // Google Sheets 的公開 CSV URL
         const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0"; // Google Sheet 的 ID
         const gid = "0";
-		const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=${gid}`;
-
-
+        const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=${gid}`;
 
         async function fetchGoogleSheetCSV() {
             try {
@@ -88,7 +94,7 @@
                         if (row.length < 6) continue; // 確保有足夠的欄位
 
                         let id = "";
-                        console.log('111111'+row[2]); 
+                        console.log('111111' + row[2]); 
                         if (row[2].includes('file/d/') && row[2].includes('/view?')) {
                             let index = row[2].indexOf('file/d/') + 7;
                             let index2 = row[2].indexOf('/view?');
