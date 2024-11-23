@@ -97,7 +97,6 @@
                         if (row.length < 6) continue; // 確保有足夠的欄位
 
                         let id = "";
-                        console.log('111111' + row[2]); 
                         if (row[2].includes('file/d/') && row[2].includes('/view?')) {
                             let index = row[2].indexOf('file/d/') + 7;
                             let index2 = row[2].indexOf('/view?');
@@ -110,7 +109,7 @@
                         card.innerHTML = `
                             <img src="${id}">
                             <div class="details">
-                                <a href="details.html?name=${encodeURIComponent(row[3])}&date=${row[4]}">
+                                <a href="index2.html?num=${(row[0])}">
                                     ${row[4].replace(/"/g, "").trim()} <br> ${row[3].replace(/"/g, "").trim()}  
                                 </a>
                             </div>
