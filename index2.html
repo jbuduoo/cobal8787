@@ -5,68 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>客戶列表</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .customer-list {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .container {
+            text-align: center;
             margin-top: 20px;
         }
-        .customer-card {
-            display: flex; /* 使用 flex 排列 */
-            align-items: center; /* 垂直方向居中對齊 */
-            justify-content: space-between; /* 確保圖片和文字兩端對齊 */
-            margin: 5px 0;
-            padding: 10px;
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 每列顯示3個按鈕 */
+            gap: 10px;
+            justify-items: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            width: 80%;
-            background-color: #f9f9f9;
-        }
-        .customer-card img {
-            width: 140px;
-            height: 100px;
-            border-radius: 2px;
             cursor: pointer;
-            margin: 0;
         }
-        .details {
-            margin-left: auto; /* 將文字推到右側 */
-            text-align: left;
-            color: #007bff;
-            font-size: 25px;
-        }
-        .details a {
-            text-decoration: none;
-            color: inherit;
-        }
-        .big-image-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%; /* 全螢幕寬度 */
-            height: 100%; /* 全螢幕高度 */
-            background: rgba(0, 0, 0, 0.8); /* 背景半透明黑色 */
-            display: flex;
-            justify-content: center; /* 水平居中 */
-            align-items: center; /* 垂直居中 */
-            visibility: hidden;
-            opacity: 0;
-            transition: visibility 0s, opacity 0.3s;
-        }
-
-        .big-image-modal img {
-            max-width: 100%; /* 確保圖片寬度不超過視窗寬度 */
-            max-height: 100%; /* 確保圖片高度不超過視窗高度 */
-            width: auto; /* 自動調整寬度，保持比例 */
-            height: auto; /* 自動調整高度，保持比例 */
-        }
-
-        .big-image-modal.active {
-            visibility: visible; /* 讓模態框可見 */
-            opacity: 1; /* 顯示模態框時的透明度 */
+        button:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -77,8 +37,20 @@
     <div id="big-image-modal" class="big-image-modal">
         <img id="big-image" src="" alt="大圖">
     </div>
+    <div class="container">
+        <h1>操作按鈕</h1>
+        <div id="button-container" class="button-grid"></div>
+    </div>
 
     <script>
+        // Google Sheets 的公開 CSV URL
+        // 取得完整網址
+        const url = new URL(window.location.href);
+        // 使用 URLSearchParams 解析參數
+        const params = new URLSearchParams(url.search);
+        // 取得參數的值
+        const manId = params.get('manId'); 
+
         // Google Sheets 的公開 CSV URL
         const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0"; // Google Sheet 的 ID
         const gid = "0";
@@ -94,16 +66,49 @@
                     const customerList = document.getElementById('customer-list');
                     for (let i = 1; i < rows.length; i++) { // 跳過表頭
                         let row = rows[i];
-                        if (row.length < 6) continue; // 確保有足夠的欄位
+                        if(!row[0].equals(manId)){
+                            continue;
+                        }
 
                         let id = "";
-                        console.log('111111' + row[2]); 
                         if (row[2].includes('file/d/') && row[2].includes('/view?')) {
                             let index = row[2].indexOf('file/d/') + 7;
                             let index2 = row[2].indexOf('/view?');
                             id = row[2].substring(index, index2);
                             id = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1920';
                         }
+
+
+                // G 到 M 欄的對應標題
+                const columns = ["叫布", "裁布", "物料", "LOGO工法", "車工", "打扣/整燙", "清點+裝箱"];
+                const buttonContainer = document.getElementById("button-container");
+
+                // 清空現有按鈕
+                buttonContainer.innerHTML = "";
+
+                // 從 G 到 M 欄生成按鈕
+                for (let i = 6; i <= 12; i++) {
+                    const value = targetRow[i]?.trim();
+                    const button = document.createElement("button");
+                    button.textContent = columns[i - 6]; // 按欄位標題命名按鈕
+
+                    // 如果是 "N"，按鈕禁用
+                    if (value === "N") {
+                        button.disabled = true;
+                    }
+
+                    // 按鈕的動作（可以按需求修改）
+                    button.onclick = () => {
+                        if (!button.disabled) {
+                            alert(`執行操作：${columns[i - 6]}`);
+                        }
+                    };
+
+                    buttonContainer.appendChild(button);
+                }
+
+
+
 
                         const card = document.createElement('div');
                         card.className = 'customer-card';
