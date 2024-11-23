@@ -89,6 +89,7 @@
                         if (row.length < 6) continue; // 確保有足夠的欄位
 
                         let id = "";
+                        console.log(row[2]); 
                         if (row[2].includes('file/d/') && row[2].includes('/view?')) {
                             let index = row[2].indexOf('file/d/') + 7;
                             let index2 = row[2].indexOf('/view?');
