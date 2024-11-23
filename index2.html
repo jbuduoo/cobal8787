@@ -68,4 +68,31 @@
                 buttonContainer.innerHTML = "";
 
                 // 從 G 到 M 欄生成按鈕
-            
+                for (let colIndex = 6; colIndex <= 12; colIndex++) {
+                    const value = targetRow[colIndex]?.trim();
+                    const button = document.createElement("button");
+                    button.textContent = columns[colIndex - 6]; // 按欄位標題命名按鈕
+
+                    // 如果是 "N"，按鈕禁用
+                    if (value === "N") {
+                        button.disabled = true;
+                    }
+
+                    // 按鈕的動作（可以按需求修改）
+                    button.onclick = () => {
+                        if (!button.disabled) {
+                            alert(`執行操作：${columns[colIndex - 6]}`);
+                        }
+                    };
+
+                    buttonContainer.appendChild(button);
+                }
+            } catch (error) {
+                console.error("讀取 Google Sheets 時發生錯誤：", error);
+            }
+        }
+
+        fetchGoogleSheetCSV();
+    </script>
+</body>
+</html>
