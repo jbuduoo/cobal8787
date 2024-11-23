@@ -54,6 +54,10 @@
                 const rows = csvText.split("\n").map(row => row.split(","));
 
                 // 找到對應的資料行
+                console.log("11111"+row[0]);
+                console.log("11111"+row[1]);
+                console.log("11111"+row[2]);
+
                 const targetRow = rows.find(row => row[0].trim() === manId);
                 if (!targetRow) {
                     alert("找不到該編號對應的資料！");

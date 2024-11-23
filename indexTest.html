@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客戶列表</title>
+    <style>
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 每列顯示3個按鈕 */
+            gap: 10px;
+            justify-items: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>操作按鈕</h1>
+        <div id="button-container" class="button-grid"></div>
+    </div>
+
+    <script>
+
+        async function fetchGoogleSheetCSV() {
+            // G 到 M 欄的對應標題
+            const columns = ["叫布", "裁布", "物料", "LOGO工法", "車工", "打扣/整燙", "清點+裝箱"];
+            const buttonContainer = document.getElementById("button-container");
+
+            // 清空現有按鈕
+            buttonContainer.innerHTML = "";
+
+            // 從 G 到 M 欄生成按鈕
+            for (let colIndex = 6; colIndex <= 12; colIndex++) {
+                const button = document.createElement("button");
+                button.textContent = columns[colIndex - 6]; // 按欄位標題命名按鈕
+
+                // 按鈕的動作（可以按需求修改）
+                button.onclick = () => {
+                    if (!button.disabled) {
+                        alert(`執行操作：${columns[colIndex - 6]}`);
+                    }
+                };
+
+                buttonContainer.appendChild(button);
+            }
+        )
+
+
+        fetchGoogleSheetCSV();
+    </script>
+</body>
+</html>
