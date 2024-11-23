@@ -74,7 +74,12 @@
     </div>
 
     <script>
-        const sheetCSVUrl = "https://drive.google.com/file/d/1ihGrVWgi5Fuh7I9H8B3UC23dMx1_GSFL/view";
+        // Google Sheets 的公開 CSV URL
+        const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0"; // Google Sheet 的 ID
+        const gid = "0";
+		const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=${gid}`;
+
+
 
         async function fetchGoogleSheetCSV() {
             try {
