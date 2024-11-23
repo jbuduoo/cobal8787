@@ -9,6 +9,13 @@
             text-align: center;
             margin-top: 20px;
         }
+        .customer-card img {
+            width: 140px;
+            height: 100px;
+            border-radius: 2px;
+            cursor: pointer;
+            margin: 0;
+        }
         .button-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr); /* 每列 3 個按鈕，寬度平分 */
@@ -88,10 +95,8 @@
 
                 if (rows && rows.length > 0) {
                     const customerList = document.getElementById('customer-list');
-                    for (let i = 1; i < rows.length; i++) { // 跳過表頭
-                        let row = rows[i];
-                        if (row.length < 6) continue; // 確保有足夠的欄位
-
+//                    for (let i = 1; i < rows.length; i++) { // 跳過表頭
+                        let row = rows[2];
                         let id = "";
                         if (row[2].includes('file/d/') && row[2].includes('/view?')) {
                             let index = row[2].indexOf('file/d/') + 7;
@@ -102,14 +107,7 @@
 
                         const card = document.createElement('div');
                         card.className = 'customer-card';
-                        card.innerHTML = `
-                            <img src="${id}">
-                            <div class="details">
-                                <a href="index2.html?num=${row[0]}">
-                                    ${row[4].replace(/"/g, "").trim()} <br> ${row[3].replace(/"/g, "").trim()}  
-                                </a>
-                            </div>
-                        `;
+                        card.innerHTML = `<img src="${id}">`;
                         card.querySelector("img").addEventListener("click", () => {
                             const modal = document.getElementById("big-image-modal");
                             const bigImage = document.getElementById("big-image");
@@ -117,7 +115,7 @@
                             modal.classList.add("active");
                         });
                         customerList.appendChild(card);
-                    }
+//                    }
 
                     // 關閉模態框
                     const modal = document.getElementById("big-image-modal");
