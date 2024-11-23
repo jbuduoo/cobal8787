@@ -34,7 +34,7 @@
         .details {
             margin-left: 30px; /* 原本是 20px，可以適度增加 */
         }
-        
+
         .details a {
             text-decoration: none;
             color: #007bff;
@@ -108,7 +108,7 @@
                             <img src="${id}">
                             <div class="details">
                                 <a href="details.html?name=${encodeURIComponent(row[3])}&date=${row[4]}">
-                                    ${row[4]} -${row[3]}  
+                                    ${row[4].replace(/"/g, "").trim()} \n ${row[3].replace(/"/g, "").trim()}  
                                 </a>
                             </div>
                         `;
