@@ -1,42 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Sheets 表格顯示</title>
+    <title>客戶列表</title>
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 18px;
-            text-align: left;
+        body {
+            font-family: Arial, sans-serif;
         }
-        th, td {
-            padding: 12px;
+        .customer-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .customer-card {
+            display: flex; /* 使用 flex 排列 */
+            align-items: center; /* 垂直方向居中對齊 */
+            justify-content: space-between; /* 確保圖片和文字兩端對齊 */
+            margin: 5px 0;
+            padding: 10px;
             border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 80%;
+            background-color: #f9f9f9;
         }
-        th {
-            background-color: #f4f4f4;
+        .customer-card img {
+            width: 140px;
+            height: 100px;
+            border-radius: 2px;
+            cursor: pointer;
+            margin: 0;
+        }
+        .details {
+            margin-left: auto; /* 將文字推到右側 */
+            text-align: left;
+            color: #007bff;
+            font-size: 25px;
+        }
+        .details a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .big-image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%; /* 全螢幕寬度 */
+            height: 100%; /* 全螢幕高度 */
+            background: rgba(0, 0, 0, 0.8); /* 背景半透明黑色 */
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s;
+        }
+
+        .big-image-modal img {
+            max-width: 100%; /* 確保圖片寬度不超過視窗寬度 */
+            max-height: 100%; /* 確保圖片高度不超過視窗高度 */
+            width: auto; /* 自動調整寬度，保持比例 */
+            height: auto; /* 自動調整高度，保持比例 */
+        }
+
+        .big-image-modal.active {
+            visibility: visible; /* 讓模態框可見 */
+            opacity: 1; /* 顯示模態框時的透明度 */
         }
     </style>
 </head>
 <body>
-    <h1>Google Sheets 資料表格</h1>
-    <table id="data-table">
-        <thead>
-            <tr id="table-header"></tr>
-        </thead>
-        <tbody id="table-body"></tbody>
-    </table>
+    <div id="customer-list" class="customer-list"></div>
+
+    <!-- 大圖顯示模態框 -->
+    <div id="big-image-modal" class="big-image-modal">
+        <img id="big-image" src="" alt="大圖">
+    </div>
 
     <script>
         // Google Sheets 的公開 CSV URL
         const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0"; // Google Sheet 的 ID
         const gid = "0";
-		const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=${gid}`;
+        const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=${gid}`;
 
-        // 讀取 CSV 並顯示表格
         async function fetchGoogleSheetCSV() {
             try {
                 const response = await fetch(sheetCSVUrl);
@@ -44,25 +91,43 @@
                 const rows = csvText.split("\n").map(row => row.split(","));
 
                 if (rows && rows.length > 0) {
-                    // 建立表頭
-					const headerRow = rows[0].map(cell => cell.replace(/"/g, "").trim());
-                    const tableHeader = document.getElementById("table-header");
-                    headerRow.forEach(header => {
-                        const th = document.createElement("th");
-                        th.textContent = header;
-                        tableHeader.appendChild(th);
-                    });
+                    const customerList = document.getElementById('customer-list');
+                    for (let i = 1; i < rows.length; i++) { // 跳過表頭
+                        let row = rows[i];
+                        if (row.length < 6) continue; // 確保有足夠的欄位
 
-                    // 建立表格內容
-                    const tableBody = document.getElementById("table-body");
-                    rows.slice(1).forEach(row => {
-                        const tr = document.createElement("tr");
-                        row.forEach(cell => {
-                            const td = document.createElement("td");
-                            td.textContent = cell.replace(/"/g, "").trim(); // 去除多餘的引號和空白
-                            tr.appendChild(td);
+                        let id = "";
+                        console.log('111111' + row[2]); 
+                        if (row[2].includes('file/d/') && row[2].includes('/view?')) {
+                            let index = row[2].indexOf('file/d/') + 7;
+                            let index2 = row[2].indexOf('/view?');
+                            id = row[2].substring(index, index2);
+                            id = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1920';
+                        }
+
+                        const card = document.createElement('div');
+                        card.className = 'customer-card';
+                        card.innerHTML = `
+                            <img src="${id}">
+                            <div class="details">
+                                <a href="index2.html?num=${(row[0])}">
+                                    ${row[4].replace(/"/g, "").trim()} <br> ${row[3].replace(/"/g, "").trim()}  
+                                </a>
+                            </div>
+                        `;
+                        card.querySelector("img").addEventListener("click", () => {
+                            const modal = document.getElementById("big-image-modal");
+                            const bigImage = document.getElementById("big-image");
+                            bigImage.src = id;
+                            modal.classList.add("active");
                         });
-                        tableBody.appendChild(tr);
+                        customerList.appendChild(card);
+                    }
+
+                    // 關閉模態框
+                    const modal = document.getElementById("big-image-modal");
+                    modal.addEventListener("click", () => {
+                        modal.classList.remove("active");
                     });
                 }
             } catch (error) {
@@ -70,7 +135,6 @@
             }
         }
 
-        // 初始化
         fetchGoogleSheetCSV();
     </script>
 </body>
