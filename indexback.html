@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客戶列表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .customer-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .customer-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 80%;
+            background-color: #f9f9f9;
+        }
+        .customer-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .details {
+            margin-left: 20px;
+            text-align: left;
+        }
+        .details a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 18px;
+        }
+        .big-image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s;
+        }
+        .big-image-modal img {
+            width: 300px;
+            height: 300px;
+        }
+        .big-image-modal.active {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">客戶列表</h1>
+    <div id="customer-list" class="customer-list">
+        <!-- 動態生成 -->
+    </div>
+
+    <!-- 大圖顯示模態框 -->
+    <div id="big-image-modal" class="big-image-modal">
+        <img id="big-image" src="https://drive.google.com/file/d/1ihGrVWgi5Fuh7I9H8B3UC23dMx1_GSFL/view" alt="大圖">
+    </div>
+
+    <script>
+        // 模擬從 Google Sheets 抓取的資料
+        const customers = [
+            { id: 1, name: "張澤凱", date: "20241110", image: "https://drive.google.com/uc?export=view&id=1iz_GaQP_O-2i5ZPjyOtTdOzw85UMUlRk", bigImage: "big1.jpg" },
+            { id: 2, name: "戴勝全", date: "20241110", image: "https://drive.google.com/uc?export=view&id=1iz_GaQP_O-2i5ZPjyOtTdOzw85UMUlRk", bigImage: "big2.jpg" },
+            { id: 3, name: "張小明", date: "20241110", image: "https://drive.google.com/uc?export=view&id=1iz_GaQP_O-2i5ZPjyOtTdOzw85UMUlRk", bigImage: "big3.jpg" },
+            { id: 4, name: "王小姐", date: "20241110", image: "https://drive.google.com/uc?export=view&id=1iz_GaQP_O-2i5ZPjyOtTdOzw85UMUlRk", bigImage: "big4.jpg" },
+        ];
+
+        // 生成客戶列表
+        function renderCustomerList() {
+            const customerList = document.getElementById('customer-list');
+            customers.forEach(customer => {
+                const card = document.createElement('div');
+                card.className = 'customer-card';
+                card.innerHTML = `
+                <img src="https://drive.google.com/uc?export=view&id=1iz_GaQP_O-2i5ZPjyOtTdOzw85UMUlRk" alt="小圖">
+                    <div class="details">
+                        <a href="details.html?name=${encodeURIComponent(customer.name)}&date=${customer.date}">
+                            ${customer.date} - ${customer.name}
+                        </a>
+                    </div>
+                `;
+                customerList.appendChild(card);
+            });
+        }
+
+        // 顯示大圖模態框
+        function showBigImage(imageUrl) {
+            const modal = document.getElementById('big-image-modal');
+            const bigImage = document.getElementById('big-image');
+            bigImage.src = imageUrl;
+            modal.classList.add('active');
+
+            // 點擊模態框關閉
+            modal.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+        }
+
+        renderCustomerList();
+    </script>
+</body>
+</html>

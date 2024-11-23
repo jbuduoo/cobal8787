@@ -66,57 +66,70 @@
 </head>
 <body>
     <h1 style="text-align: center;">客戶列表</h1>
-    <div id="customer-list" class="customer-list">
-        <!-- 動態生成 -->
-    </div>
+    <div id="customer-list" class="customer-list"></div>
 
     <!-- 大圖顯示模態框 -->
     <div id="big-image-modal" class="big-image-modal">
-        <img id="big-image" src="https://drive.google.com/file/d/1ihGrVWgi5Fuh7I9H8B3UC23dMx1_GSFL/view" alt="大圖">
+        <img id="big-image" src="" alt="大圖">
     </div>
 
     <script>
-        // 模擬從 Google Sheets 抓取的資料
-        const customers = [
-            { id: 1, name: "張澤凱", date: "20241110", image: "https://drive.google.com/uc?export=view&id=1iz_GaQP_O-2i5ZPjyOtTdOzw85UMUlRk", bigImage: "big1.jpg" },
-            { id: 2, name: "戴勝全", date: "20241110", image: "https://drive.google.com/uc?export=view&id=1iz_GaQP_O-2i5ZPjyOtTdOzw85UMUlRk", bigImage: "big2.jpg" },
-            { id: 3, name: "張小明", date: "20241110", image: "https://drive.google.com/uc?export=view&id=1iz_GaQP_O-2i5ZPjyOtTdOzw85UMUlRk", bigImage: "big3.jpg" },
-            { id: 4, name: "王小姐", date: "20241110", image: "https://drive.google.com/uc?export=view&id=1iz_GaQP_O-2i5ZPjyOtTdOzw85UMUlRk", bigImage: "big4.jpg" },
-        ];
+        const sheetCSVUrl = "https://docs.google.com/spreadsheets/d/你的SheetID/export?format=csv";
 
-        // 生成客戶列表
-        function renderCustomerList() {
-            const customerList = document.getElementById('customer-list');
-            customers.forEach(customer => {
-                const card = document.createElement('div');
-                card.className = 'customer-card';
-                card.innerHTML = `
-                <img src="https://drive.google.com/thumbnail?id=1ihGrVWgi5Fuh7I9H8B3UC23dMx1_GSFL&sz=w1366" >
-                <img src="https://drive.google.com/uc?export=view&id=1ihGrVWgi5Fuh7I9H8B3UC23dMx1_GSFL" alt="小圖">
-                    <div class="details">
-                        <a href="details.html?name=${encodeURIComponent(customer.name)}&date=${customer.date}">
-                            ${customer.date} - ${customer.name}
-                        </a>
-                    </div>
-                `;
-                customerList.appendChild(card);
-            });
+        async function fetchGoogleSheetCSV() {
+            try {
+                const response = await fetch(sheetCSVUrl);
+                const csvText = await response.text();
+                const rows = csvText.split("\n").map(row => row.split(","));
+
+                if (rows && rows.length > 0) {
+                    const customerList = document.getElementById('customer-list');
+                    for (let i = 1; i < rows.length; i++) { // 跳過表頭
+                        let row = rows[i];
+                        if (row.length < 6) continue; // 確保有足夠的欄位
+
+                        let id = "";
+                        if (row[2].includes('file/d/') && row[2].includes('/view?')) {
+                            let index = row[2].indexOf('file/d/') + 7;
+                            let index2 = row[2].indexOf('/view?');
+                            id = row[2].substring(index, index2);
+                            id = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1366';
+                        } else {
+                            console.warn(`Invalid URL format: ${row[2]}`);
+                            continue;
+                        }
+
+                        const card = document.createElement('div');
+                        card.className = 'customer-card';
+                        card.innerHTML = `
+                            <img src="${id}">
+                            <div class="details">
+                                <a href="details.html?name=${encodeURIComponent(row[4])}&date=${row[5]}">
+                                    ${row[5]} - ${row[4]}
+                                </a>
+                            </div>
+                        `;
+                        card.querySelector("img").addEventListener("click", () => {
+                            const modal = document.getElementById("big-image-modal");
+                            const bigImage = document.getElementById("big-image");
+                            bigImage.src = id;
+                            modal.classList.add("active");
+                        });
+                        customerList.appendChild(card);
+                    }
+
+                    // 關閉模態框
+                    const modal = document.getElementById("big-image-modal");
+                    modal.addEventListener("click", () => {
+                        modal.classList.remove("active");
+                    });
+                }
+            } catch (error) {
+                console.error("讀取 Google Sheets 時發生錯誤:", error);
+            }
         }
 
-        // 顯示大圖模態框
-        function showBigImage(imageUrl) {
-            const modal = document.getElementById('big-image-modal');
-            const bigImage = document.getElementById('big-image');
-            bigImage.src = imageUrl;
-            modal.classList.add('active');
-
-            // 點擊模態框關閉
-            modal.addEventListener('click', () => {
-                modal.classList.remove('active');
-            });
-        }
-
-        renderCustomerList();
+        fetchGoogleSheetCSV();
     </script>
 </body>
 </html>
