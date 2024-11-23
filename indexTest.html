@@ -11,17 +11,21 @@
         }
         .button-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 每列顯示3個按鈕 */
-            gap: 10px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px; /* 增加按钮之间的间距 */
             justify-items: center;
             margin-top: 20px;
         }
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            width: 160px;    /* 固定按钮宽度 */
+            height: 60px;    /* 固定按钮高度 */
+            font-size: 18px; /* 增大字体 */
             border: 1px solid #ddd;
             border-radius: 8px;
             cursor: pointer;
+            display: flex;           /* 使文本在按钮内居中 */
+            justify-content: center; /* 水平居中 */
+            align-items: center;     /* 垂直居中 */
         }
         button:disabled {
             background-color: #ccc;
@@ -52,9 +56,7 @@
 
                 // 按鈕的動作（可以按需求修改）
                 button.onclick = () => {
-                    if (!button.disabled) {
-                        alert(`執行操作：${columns[colIndex - 6]}`);
-                    }
+                    alert(`執行操作：${columns[colIndex - 6]}`);
                 };
 
                 buttonContainer.appendChild(button);
