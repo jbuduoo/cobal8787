@@ -3,67 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>客戶列表</title>
+    <title>響應式按鈕設計</title>
     <style>
-        .container {
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
             text-align: center;
-            margin-top: 20px;
         }
         .button-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 自動調整按鈕列數 */
-            gap: 20px; /* 按鈕間距 */
-            justify-items: center;
-            margin-top: 20px;
+            grid-template-columns: repeat(3, 1fr); /* 每行 3 個按鈕 */
+            gap: 15px; /* 按鈕之間的間距 */
+            padding: 20px;
         }
         button {
-            width: 20%; /* 相對寬度，螢幕寬度的 20% */
-            height: 15vh; /* 相對高度，螢幕高度的 8% */
-            font-size: 2vw; /* 文字大小隨螢幕寬度調整 */
-            border: 1px solid #ddd;
+            width: calc(100% - 30px); /* 填滿行寬，留出邊距 */
+            max-width: 300px; /* 最大寬度 300px */
+            height: 50px; /* 固定高度 */
+            font-size: calc(1em + 1vw); /* 文字大小隨螢幕寬度調整 */
+            background-color: #4CAF50; /* 綠色背景 */
+            color: white; /* 文字顏色 */
+            border: none;
             border-radius: 8px;
             cursor: pointer;
-            padding: 0;
         }
         button:disabled {
             background-color: #ccc;
             color: #666;
             cursor: not-allowed;
         }
+        /* 手機和小畫面設計 */
+        @media (max-width: 768px) {
+            .button-grid {
+                grid-template-columns: 1fr; /* 每行顯示 1 個按鈕 */
+            }
+            button {
+                font-size: 16px; /* 手機上文字大小固定 */
+                height: 60px; /* 手機上按鈕高度增加 */
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>操作按鈕</h1>
-        <div id="button-container" class="button-grid"></div>
+    <h1>響應式按鈕設計</h1>
+    <div class="button-grid">
+        <button>叫布</button>
+        <button disabled>裁布</button>
+        <button>物料</button>
+        <button>LOGO工法</button>
+        <button>車工</button>
+        <button>打扣/整燙</button>
+        <button>清點+裝箱</button>
     </div>
-
-    <script>
-        function fetchGoogleSheetCSV() {
-            // G 到 M 欄的對應標題
-            const columns = ["叫布", "裁布", "物料", "LOGO工法", "車工", "打扣/整燙", "清點+裝箱"];
-            const buttonContainer = document.getElementById("button-container");
-
-            // 清空現有按鈕
-            buttonContainer.innerHTML = "";
-
-            // 從 G 到 M 欄生成按鈕
-            for (let colIndex = 6; colIndex <= 12; colIndex++) {
-                const button = document.createElement("button");
-                button.textContent = columns[colIndex - 6]; // 按欄位標題命名按鈕
-
-                // 按鈕的動作（可以按需求修改）
-                button.onclick = () => {
-                    if (!button.disabled) {
-                        alert(`執行操作：${columns[colIndex - 6]}`);
-                    }
-                };
-
-                buttonContainer.appendChild(button);
-            }
-        }
-
-        fetchGoogleSheetCSV();
-    </script>
 </body>
 </html>
