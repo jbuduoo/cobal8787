@@ -11,7 +11,7 @@
         }
         .customer-card img {
             width: 100%; /* 圖片寬度佔滿容器 */
-            max-width: 640px; /* 最大寬度 */
+            max-width: 400px; /* 最大寬度 */
             height: auto; /* 高度自動調整 */
             border-radius: 2px;
             cursor: pointer;
@@ -74,24 +74,25 @@
     </div>
 
     <script>
-        // Google Sheets 的公開 CSV URL
-        const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0"; // Google Sheet 的 ID
+        const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0";
         const gid = "0";
         const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=${gid}`;
+        let rows = null;
+        const manId = 3;
 
         // 取得 Google Sheets 資料並渲染客戶列表
         async function fetchAndRenderCustomerList() {
             try {
                 const response = await fetch(sheetCSVUrl);
                 const csvText = await response.text();
-                const rows = csvText.split("\n").map(row => row.split(","));
+                rows = csvText.split("\n").map(row => row.split(","));
 
                 if (rows && rows.length > 0) {
                     const customerList = document.getElementById('customer-list');
-                    let row = rows[2]; // 假設取某行資料
+                    let row = rows[manId];
                     let id = "";
-                    console.log("1111"+row[2]);
-                    if (row[2].includes('file/d/') && row[2].includes('/view?')) {
+
+                    if (row[2] && row[2].includes('file/d/') && row[2].includes('/view?')) {
                         let index = row[2].indexOf('file/d/') + 7;
                         let index2 = row[2].indexOf('/view?');
                         id = row[2].substring(index, index2);
@@ -100,7 +101,7 @@
 
                     const card = document.createElement('div');
                     card.className = 'customer-card';
-                    card.innerHTML = `<img src="${id}">`;
+                    card.innerHTML = `<img src="${id}" alt="客戶圖片">`;
                     customerList.appendChild(card);
 
                     // 點擊圖片放大
@@ -124,17 +125,21 @@
 
         // 按鈕生成邏輯
         function generateButtons() {
+            if (!rows || rows.length <= manId) return;
+
             const columns = ["叫布", "裁布", "物料", "LOGO工法", "車工", "打扣/整燙", "清點+裝箱"];
             const buttonContainer = document.getElementById("button-container");
-
             buttonContainer.innerHTML = "";
 
+            const row = rows[manId];
             for (let colIndex = 6; colIndex <= 12; colIndex++) {
                 const button = document.createElement("button");
                 button.textContent = columns[colIndex - 6];
 
-                if (colIndex === 7) {
+                if (row[colIndex] === 'N') {
                     button.disabled = true;
+                } else if (row[colIndex] && row[colIndex].length > 1) {
+                    button.textContent += ` (${row[colIndex]})`;
                 }
 
                 button.onclick = () => {
@@ -148,8 +153,9 @@
         }
 
         // 初始化
-        fetchAndRenderCustomerList();
-        generateButtons();
+        fetchAndRenderCustomerList().then(() => {
+            generateButtons();
+        });
     </script>
 </body>
 </html>
