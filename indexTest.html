@@ -133,6 +133,7 @@
 
             const row = rows[manId];
             for (let colIndex = 6; colIndex <= 12; colIndex++) {
+                row[colIndex] =row[colIndex].replace(/"/g, "").trim();
                 const button = document.createElement("button");
                 button.textContent = columns[colIndex - 6];
 
