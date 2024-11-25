@@ -84,7 +84,7 @@
             try {
                 const response = await fetch(sheetCSVUrl);
                 const csvText = await response.text();
-                const rows = csvText.split("\\n").map(row => row.split(","));
+                const rows = csvText.split("\n").map(row => row.split(","));
 
                 if (rows && rows.length > 0) {
                     const customerList = document.getElementById('customer-list');
