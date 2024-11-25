@@ -90,6 +90,7 @@
                     const customerList = document.getElementById('customer-list');
                     let row = rows[2]; // 假設取某行資料
                     let id = "";
+                    console.log("1111"+row[2]);
                     if (row[2].includes('file/d/') && row[2].includes('/view?')) {
                         let index = row[2].indexOf('file/d/') + 7;
                         let index2 = row[2].indexOf('/view?');
