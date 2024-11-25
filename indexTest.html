@@ -10,11 +10,11 @@
             margin-top: 20px;
         }
         .customer-card img {
-            width: 140px;
-            height: 100px;
+            width: 100%; /* 圖片寬度佔滿容器 */
+            max-width: 140px; /* 最大寬度 */
+            height: auto; /* 高度自動調整 */
             border-radius: 2px;
             cursor: pointer;
-            margin: 0;
         }
         .button-grid {
             display: grid;
@@ -38,6 +38,26 @@
             color: #000000;
             cursor: not-allowed;
         }
+        #big-image-modal {
+            display: none; /* 預設隱藏 */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* 半透明背景 */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #big-image-modal.active {
+            display: flex; /* 顯示模態框 */
+        }
+        #big-image {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -46,6 +66,11 @@
 
     <div class="container">
         <div id="button-container" class="button-grid"></div>
+    </div>
+
+    <!-- 模態框 -->
+    <div id="big-image-modal">
+        <img id="big-image" src="" alt="大圖顯示">
     </div>
 
     <script>
@@ -59,42 +84,42 @@
             try {
                 const response = await fetch(sheetCSVUrl);
                 const csvText = await response.text();
-                const rows = csvText.split("\n").map(row => row.split(","));
+                const rows = csvText.split("\\n").map(row => row.split(","));
 
                 if (rows && rows.length > 0) {
                     const customerList = document.getElementById('customer-list');
-//                    for (let i = 1; i < rows.length; i++) { // 跳過表頭
-                        let row = rows[2];
-                        let id = "";
-                        if (row[2].includes('file/d/') && row[2].includes('/view?')) {
-                            let index = row[2].indexOf('file/d/') + 7;
-                            let index2 = row[2].indexOf('/view?');
-                            id = row[2].substring(index, index2);
-                            id = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1920';
-                        }
+                    let row = rows[2]; // 假設取某行資料
+                    let id = "";
+                    if (row[2].includes('file/d/') && row[2].includes('/view?')) {
+                        let index = row[2].indexOf('file/d/') + 7;
+                        let index2 = row[2].indexOf('/view?');
+                        id = row[2].substring(index, index2);
+                        id = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1920';
+                    }
 
-                        const card = document.createElement('div');
-                        card.className = 'customer-card';
-                        card.innerHTML = `<img src="${id}">`;
-                        card.querySelector("img").addEventListener("click", () => {
-                            const modal = document.getElementById("big-image-modal");
-                            const bigImage = document.getElementById("big-image");
-                            bigImage.src = id;
-                            modal.classList.add("active");
-                        });
-                        customerList.appendChild(card);
-//                    }
+                    const card = document.createElement('div');
+                    card.className = 'customer-card';
+                    card.innerHTML = `<img src="${id}">`;
+                    customerList.appendChild(card);
 
-                    // 關閉模態框
-                    const modal = document.getElementById("big-image-modal");
-                    modal.addEventListener("click", () => {
-                        modal.classList.remove("active");
+                    // 點擊圖片放大
+                    card.querySelector("img").addEventListener("click", () => {
+                        const modal = document.getElementById("big-image-modal");
+                        const bigImage = document.getElementById("big-image");
+                        bigImage.src = id;
+                        modal.classList.add("active");
                     });
                 }
             } catch (error) {
                 console.error("讀取 Google Sheets 時發生錯誤:", error);
             }
         }
+
+        // 點擊模態框關閉
+        document.getElementById('big-image-modal').addEventListener('click', () => {
+            const modal = document.getElementById('big-image-modal');
+            modal.classList.remove('active');
+        });
 
         // 按鈕生成邏輯
         function generateButtons() {
