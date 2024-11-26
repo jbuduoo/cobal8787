@@ -92,7 +92,7 @@
                     let row = rows[manId];
                     let id = "";
 
-                    if (row[1] && row[1].includes('file/d/') && row[2].includes('/view?')) {
+                    if (row[1] && row[1].includes('file/d/') && row[1].includes('/view?')) {
                         let index = row[1].indexOf('file/d/') + 7;
                         let index2 = row[1].indexOf('/view?');
                         id = row[1].substring(index, index2);
