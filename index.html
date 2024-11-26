@@ -97,10 +97,10 @@
                         if (row.length < 6) continue; // 確保有足夠的欄位
 
                         let id = "";
-                        if (row[2].includes('file/d/') && row[2].includes('/view?')) {
-                            let index = row[2].indexOf('file/d/') + 7;
-                            let index2 = row[2].indexOf('/view?');
-                            id = row[2].substring(index, index2);
+                        if (row[1].includes('file/d/') && row[2].includes('/view?')) {
+                            let index = row[1].indexOf('file/d/') + 7;
+                            let index2 = row[1].indexOf('/view?');
+                            id = row[1].substring(index, index2);
                             id = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1920';
                         }
 
