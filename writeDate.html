@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets 表單提交</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #a6d8d3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: #79c1b5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+        .form-container input[type="text"],
+        .form-container input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .form-container button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form id="googleForm">
+            <label for="name">您的姓名：</label>
+            <input type="text" id="name" name="entry.1495441973" required>
+
+            <label for="phone">您的電話：</label>
+            <input type="tel" id="phone" name="entry.609461637" required>
+            
+            <label for="demand">您的需求：</label>
+            <input type="text" id="demand" name="entry.1735934499" required>
+            
+            <button type="submit">送出</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("googleForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            
+            // Google 表單的表單提交 URL
+            const scriptURL = "https://docs.google.com/forms/d/e/1FAIpQLSdAZGqOr1o8GJQjnsfEw1Z93-7taKdwtR7zphlQyJVN43ilBQ/formResponse";    
+            
+            // 將表單數據打包為 FormData
+            const formData = new FormData(this);
+            
+            fetch(scriptURL, {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => {
+                alert("表單已成功提交！");
+                this.reset();
+            })
+            .catch(error => {
+                alert("提交失敗，請稍後再試！");
+                console.error("Error!", error.message);
+            });
+        });
+    </script>
+</body>
+</html>
