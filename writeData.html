@@ -64,9 +64,10 @@
         document.getElementById("googleForm").addEventListener("submit", function (e) {
             e.preventDefault();
             
-            // Google 表單的表單提交 URL
+            // Google Apps Script 的 Web App URL
             const scriptURL = "https://script.google.com/macros/s/AKfycbxds050kvJmBixOnvvRO5eFyil-quSyP5En5EQrZ6bI6I5ddvd5jOe9nPN8LzSeNqrW/exec";    
-            
+
+
             // 將表單數據打包為 FormData
             const formData = new FormData(this);
             
