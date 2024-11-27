@@ -3,100 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>客戶列表</title>
+    <title>動態按鈕與表單提交</title>
     <style>
         .container {
             text-align: center;
             margin-top: 20px;
         }
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 每列顯示3個按鈕 */
-            gap: 10px;
-            justify-items: center;
-            margin-top: 20px;
-        }
         button {
-            padding: 10px 20px;
+            height: 40px;
             font-size: 16px;
+            margin: 5px;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 2px;
             cursor: pointer;
+            background-color: hsl(124, 67%, 75%);
+            color: #000000;
+            padding: 0;
         }
         button:disabled {
             background-color: #ccc;
-            color: #666;
+            color: #000000;
             cursor: not-allowed;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
     </style>
 </head>
 <body>
-    <div id="customer-list" class="customer-list"></div>
-
     <div class="container">
-        <h1>操作按鈕</h1>
-        <div id="button-container" class="button-grid"></div>
+        <h2>動態按鈕範例</h2>
+        <div id="button-container"></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal" id="dataModal">
+        <h3>填寫資料</h3>
+        <form id="dataForm">
+            <label for="item">項目：</label>
+            <input type="text" id="item" name="entry.1495441973" readonly><br>
+
+            <label for="phone">電話：</label>
+            <input type="text" id="phone" name="entry.609461637" required><br>
+
+            <label for="demand">需求：</label>
+            <input type="text" id="demand" name="entry.1735934499" required><br>
+
+            <button type="button" id="submitButton">提交</button>
+            <button type="button" id="closeButton">取消</button>
+        </form>
     </div>
 
     <script>
-        const url = new URL(window.location.href);
-        const params = new URLSearchParams(url.search);
-        const manId = params.get('manId'); // 取得網址參數的編號
+        const rows = [
+            ["", "", "", "", "", "Y", "N", "LOGO工法值", "Y", "打扣值", "N", "清點值"]
+        ]; // 模擬數據
+        const manId = 0;
 
-        const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0"; // Google Sheet 的 ID
-        const gid = "0";
-        const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=${gid}`;
+        const scriptURL = "https://script.google.com/macros/s/AKfycbz-4spX6uoTc_4qrSaFxFn4LHomVpeE0rdDQC19oiks1ZDHBWJtTlU90ewERa6AwcI/exec";
 
-        async function fetchGoogleSheetCSV() {
-            try {
-                const response = await fetch(sheetCSVUrl);
-                const csvText = await response.text();
-                const rows = csvText.split("\n").map(row => row.split(","));
+        // 按鈕生成邏輯
+        function generateButtons() {
+            if (!rows || rows.length <= manId) return;
 
-                // 找到對應的資料行
-                console.log("11111"+row[0]);
-                console.log("11111"+row[1]);
-                console.log("11111"+row[2]);
+            const columns = ["叫布", "裁布", "物料", "LOGO工法", "車工", "打扣/整燙", "清點+裝箱"];
+            const buttonContainer = document.getElementById("button-container");
+            buttonContainer.innerHTML = "";
 
-                const targetRow = rows.find(row => row[0].trim() === manId);
-                if (!targetRow) {
-                    alert("找不到該編號對應的資料！");
-                    return;
+            const row = rows[manId];
+            for (let colIndex = 5; colIndex <= 11; colIndex++) {
+                row[colIndex] = row[colIndex].replace(/"/g, "").trim();
+                const button = document.createElement("button");
+                button.textContent = columns[colIndex - 5];
+
+                if (row[colIndex] === 'N') {
+                    button.disabled = true;
+                } else if (row[colIndex] && row[colIndex].length > 1) {
+                    button.textContent += ` (${row[colIndex]})`;
                 }
 
-                // G 到 M 欄的對應標題
-                const columns = ["叫布", "裁布", "物料", "LOGO工法", "車工", "打扣/整燙", "清點+裝箱"];
-                const buttonContainer = document.getElementById("button-container");
-
-                // 清空現有按鈕
-                buttonContainer.innerHTML = "";
-
-                // 從 G 到 M 欄生成按鈕
-                for (let colIndex = 6; colIndex <= 12; colIndex++) {
-                    const value = targetRow[colIndex]?.trim();
-                    const button = document.createElement("button");
-                    button.textContent = columns[colIndex - 6]; // 按欄位標題命名按鈕
-
-                    // 如果是 "N"，按鈕禁用
-                    if (value === "N") {
-                        button.disabled = true;
+                button.onclick = () => {
+                    if (!button.disabled) {
+                        openModal(columns[colIndex - 5]); // 打開對話框，並傳入項目名稱
                     }
+                };
 
-                    // 按鈕的動作（可以按需求修改）
-                    button.onclick = () => {
-                        if (!button.disabled) {
-                            alert(`執行操作：${columns[colIndex - 6]}`);
-                        }
-                    };
-
-                    buttonContainer.appendChild(button);
-                }
-            } catch (error) {
-                console.error("讀取 Google Sheets 時發生錯誤：", error);
+                buttonContainer.appendChild(button);
             }
         }
 
-        fetchGoogleSheetCSV();
+        // 打開 Modal 並顯示當前操作
+        function openModal(operation) {
+            const modal = document.getElementById("dataModal");
+            const overlay = document.getElementById("modal-overlay");
+
+            modal.style.display = "block";
+            overlay.style.display = "block";
+
+            // 自動填入項目名稱
+            document.getElementById("item").value = operation;
+
+            // 設定提交按鈕的事件
+            document.getElementById("submitButton").onclick = () => submitData(operation);
+        }
+
+        // 關閉 Modal
+        function closeModal() {
+            const modal = document.getElementById("dataModal");
+            const overlay = document.getElementById("modal-overlay");
+
+            modal.style.display = "none";
+            overlay.style.display = "none";
+        }
+
+        // 提交數據到 Google Apps Script
+        function submitData(operation) {
+            const form = document.getElementById("dataForm");
+            const formData = new FormData(form);
+
+            // 添加操作名稱作為額外參數
+            formData.append("operation", operation);
+
+            fetch(scriptURL, {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => {
+                alert("表單已成功提交！");
+                form.reset(); // 重置表單
+                closeModal(); // 關閉對話框
+            })
+            .catch(error => {
+                alert("提交失敗，請稍後再試！");
+                console.error("Error!", error.message);
+            });
+        }
+
+        // 初始化
+        document.getElementById("closeButton").addEventListener("click", closeModal);
+        generateButtons();
     </script>
 </body>
 </html>
