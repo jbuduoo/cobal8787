@@ -117,10 +117,8 @@
         <form id="dataForm">
             <label for="item">項目：</label>
             <input type="text" id="item" name="entry.1495441973" readonly><br>
-            <label for="phone">電話：</label>
+            <label for="phone">人員編號：</label>
             <input type="text" id="phone" name="entry.609461637" required><br>
-            <label for="demand">需求：</label>
-            <input type="text" id="demand" name="entry.1735934499" required><br>
             <div class="modal-buttons">
                 <button type="button" id="submitButton">提交</button>
                 <button type="button" id="closeButton">取消</button>
@@ -200,7 +198,6 @@
 
             document.getElementById("item").value = operation;
             document.getElementById("phone").value = "";
-            document.getElementById("demand").value = "";
 
             document.getElementById("submitButton").onclick = () => submitData(operation);
         }
