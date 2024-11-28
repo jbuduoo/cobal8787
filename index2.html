@@ -115,10 +115,10 @@
     <div class="modal" id="dataModal">
         <h3>填寫資料</h3>
         <form id="dataForm">
-            <label for="item">施工項目：</label>
-            <input type="text" id="item" name="entry.1495441973" readonly><br>
             <label for="orderNumber">案件編號：</label>
             <input type="text" id="orderNumber" name="entry.609461637" required><br>
+            <label for="item">施工項目：</label>
+            <input type="text" id="item" name="entry.1495441973" readonly><br>
             <label for="employee">員工編號：</label>
             <input type="text" id="employee" name="entry.1735934499" required><br>
             <div class="modal-buttons">
@@ -198,8 +198,8 @@
             modal.style.display = "block";
             overlay.style.display = "block";
 
-            document.getElementById("item").value = operation;
             document.getElementById("orderNumber").value = manId;
+            document.getElementById("item").value = operation;
             document.getElementById("employee").value = "";
             document.getElementById("submitButton").onclick = () => submitData(operation);
         }
