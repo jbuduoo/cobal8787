@@ -49,6 +49,18 @@
     </style>
 </head>
 <body>
+    <!-- 新增圖片 -->
+    <div id="customer-list" class="customer-list"></div>
+
+    <div class="container">
+        <div id="button-container" class="button-grid"></div>
+    </div>
+
+    <!-- 模態框 -->
+    <div id="big-image-modal">
+        <img id="big-image" src="" alt="大圖顯示">
+    </div>
+
     <div class="container">
         <h2>動態按鈕範例</h2>
         <div id="button-container"></div>
@@ -74,10 +86,55 @@
     </div>
 
     <script>
-        const rows = [
-            ["", "", "", "", "", "Y", "N", "LOGO工法值", "Y", "打扣值", "N", "清點值"]
-        ]; // 模擬數據
-        const manId = 0;
+
+const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0";
+        const gid = "0";
+        const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=${gid}`;
+        let rows = null;
+        const manId = 3;
+
+        // 取得 Google Sheets 資料並渲染客戶列表
+        async function fetchAndRenderCustomerList() {
+            try {
+                const response = await fetch(sheetCSVUrl);
+                const csvText = await response.text();
+                rows = csvText.split("\n").map(row => row.split(","));
+
+                if (rows && rows.length > 0) {
+                    const customerList = document.getElementById('customer-list');
+                    let row = rows[manId];
+                    let id = "";
+
+                    if (row[1] && row[1].includes('file/d/') && row[1].includes('/view?')) {
+                        let index = row[1].indexOf('file/d/') + 7;
+                        let index2 = row[1].indexOf('/view?');
+                        id = row[1].substring(index, index2);
+                        id = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1920';
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = 'customer-card';
+                    card.innerHTML = `<img src="${id}" alt="客戶圖片">`;
+                    customerList.appendChild(card);
+
+                    // 點擊圖片放大
+                    card.querySelector("img").addEventListener("click", () => {
+                        const modal = document.getElementById("big-image-modal");
+                        const bigImage = document.getElementById("big-image");
+                        bigImage.src = id;
+                        modal.classList.add("active");
+                    });
+                }
+            } catch (error) {
+                console.error("讀取 Google Sheets 時發生錯誤:", error);
+            }
+        }
+
+        // 點擊模態框關閉
+        document.getElementById('big-image-modal').addEventListener('click', () => {
+            const modal = document.getElementById('big-image-modal');
+            modal.classList.remove('active');
+        });
 
         const scriptURL = "https://script.google.com/macros/s/AKfycbz-4spX6uoTc_4qrSaFxFn4LHomVpeE0rdDQC19oiks1ZDHBWJtTlU90ewERa6AwcI/exec";
 
