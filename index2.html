@@ -136,7 +136,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         // 獲取 num 的值
         const manId = urlParams.get('num');
-
+        let row = null;
         async function fetchAndRenderCustomerList() {
             try {
                 const response = await fetch(sheetCSVUrl);
@@ -145,7 +145,6 @@
 
                 if (rows && rows.length > 0) {
                     const customerList = document.getElementById('customer-list');
-                    let row = null;
 
                     // 找到符合 manId 的行
                     for (const rowNum of rows) {
@@ -187,13 +186,11 @@
         }
 
         function generateButtons() {
-            if (!rows || rows.length <= manId) return;
 
             const columns = ["叫布", "裁布", "物料", "LOGO工法", "車工", "打扣/整燙", "清點+裝箱"];
             const buttonContainer = document.getElementById("button-container");
             buttonContainer.innerHTML = "";
 
-            const row = rows[manId];
             for (let colIndex = 5; colIndex <= 11; colIndex++) {
                 const value = (row[colIndex] || "").replace(/"/g, "").trim();
                 const button = document.createElement("button");
