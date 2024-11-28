@@ -143,23 +143,42 @@
                 const csvText = await response.text();
                 rows = csvText.split("\n").map(row => row.split(","));
 
-                if (rows && rows.length > manId) {
+                if (rows && rows.length > 0) {
                     const customerList = document.getElementById('customer-list');
-                    const row = rows[manId];
+                    let row = null;
+
+                    // 找到符合 manId 的行
+                    for (const rowNum of rows) {
+                        // 移除 rowNum[0] 中的多餘引號
+                        const cleanValue = rowNum[0].replace(/"/g, "").trim();
+                        if (cleanValue === String(manId)) {
+                            row = rowNum;
+                            break;
+                        }
+                    }
+
+                    if (!row) {
+                        console.error("找不到符合 manId 的資料！");
+                        return;
+                    }
+
                     let id = "";
 
+                    // 提取圖片 ID 並生成圖片 URL
                     if (row[1] && row[1].includes('file/d/') && row[1].includes('/view?')) {
                         const index = row[1].indexOf('file/d/') + 7;
                         const index2 = row[1].indexOf('/view?');
                         id = row[1].substring(index, index2);
-                        id = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w860';
+                        id = `https://drive.google.com/thumbnail?id=${id}&sz=w860`;
                     }
 
+                    // 建立圖片卡片
                     const card = document.createElement('div');
                     card.className = 'customer-card';
                     card.innerHTML = `<img src="${id}" alt="客戶圖片">`;
                     customerList.appendChild(card);
 
+                    // 生成按鈕
                     generateButtons();
                 }
             } catch (error) {
