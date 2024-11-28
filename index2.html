@@ -91,20 +91,19 @@
         </form>
     </div>
 
-    <script>  
-        //取得圖片，文字           
+    <script>
         const sheetCSVUrl = "https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv&gid=0";
         let rows = null;
         const manId = 3;
 
-        //處理圖片
+        //處理圖片與按鈕
         async function fetchAndRenderCustomerList() {
             try {
                 const response = await fetch(sheetCSVUrl);
                 const csvText = await response.text();
                 rows = csvText.split("\n").map(row => row.split(","));
 
-                if (rows && rows.length > 0) {
+                if (rows && rows.length > manId) {
                     const customerList = document.getElementById('customer-list');
                     const row = rows[manId];
                     let id = "";
@@ -113,19 +112,23 @@
                         const index = row[1].indexOf('file/d/') + 7;
                         const index2 = row[1].indexOf('/view?');
                         id = row[1].substring(index, index2);
-                        id = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1920';
+                        id = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w860';
                     }
 
                     const card = document.createElement('div');
                     card.className = 'customer-card';
                     card.innerHTML = `<img src="${id}" alt="客戶圖片">`;
                     customerList.appendChild(card);
+
+                    // 確保圖片加載完成後再生成按鈕
+                    generateButtons();
                 }
             } catch (error) {
                 console.error("讀取 Google Sheets 時發生錯誤:", error);
             }
         }
-        //處理按鈕
+
+        //生成按鈕
         function generateButtons() {
             if (!rows || rows.length <= manId) return;
 
@@ -173,9 +176,7 @@
             document.getElementById("modal-overlay").style.display = "none";
         }
 
-        //傳送資料至script
         const scriptURL = "https://script.google.com/macros/s/AKfycbz-4spX6uoTc_4qrSaFxFn4LHomVpeE0rdDQC19oiks1ZDHBWJtTlU90ewERa6AwcI/exec";
-
 
         function submitData(operation) {
             const form = document.getElementById("dataForm");
@@ -200,7 +201,6 @@
         document.getElementById("closeButton").addEventListener("click", closeModal);
 
         fetchAndRenderCustomerList();
-        generateButtons();
     </script>
 </body>
 </html>
