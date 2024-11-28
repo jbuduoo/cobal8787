@@ -66,7 +66,6 @@
     <div id="customer-list" class="customer-list"></div>
 
     <div class="container">
-        <h2>動態按鈕範例</h2>
         <div id="button-container" class="button-grid"></div>
     </div>
 
@@ -92,14 +91,13 @@
         </form>
     </div>
 
-    <script>
-        const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0";
-        const gid = "0";
-        const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=${gid}`;
-        const scriptURL = "https://script.google.com/macros/s/AKfycbz-4spX6uoTc_4qrSaFxFn4LHomVpeE0rdDQC19oiks1ZDHBWJtTlU90ewERa6AwcI/exec";
+    <script>  
+        //取得圖片，文字           
+        const sheetCSVUrl = "https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv&gid=0";
         let rows = null;
         const manId = 3;
 
+        //處理圖片
         async function fetchAndRenderCustomerList() {
             try {
                 const response = await fetch(sheetCSVUrl);
@@ -127,7 +125,7 @@
                 console.error("讀取 Google Sheets 時發生錯誤:", error);
             }
         }
-
+        //處理按鈕
         function generateButtons() {
             if (!rows || rows.length <= manId) return;
 
@@ -174,6 +172,10 @@
             document.getElementById("dataModal").style.display = "none";
             document.getElementById("modal-overlay").style.display = "none";
         }
+
+        //傳送資料至script
+        const scriptURL = "https://script.google.com/macros/s/AKfycbz-4spX6uoTc_4qrSaFxFn4LHomVpeE0rdDQC19oiks1ZDHBWJtTlU90ewERa6AwcI/exec";
+
 
         function submitData(operation) {
             const form = document.getElementById("dataForm");
