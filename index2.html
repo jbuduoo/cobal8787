@@ -9,10 +9,23 @@
             text-align: center;
             margin-top: 20px;
         }
+        .customer-card img {
+            width: 100%; /* 圖片寬度佔滿容器 */
+            max-width: 400px; /* 最大寬度 */
+            height: auto; /* 高度自動調整 */
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 每列 3 個按鈕，寬度平分 */
+            gap: 10px; /* 按鈕間距 */
+            justify-items: stretch; /* 按鈕寬度填滿列 */
+            margin-top: 20px;
+        }
         button {
             height: 40px;
             font-size: 16px;
-            margin: 5px;
             border: 1px solid #ddd;
             border-radius: 2px;
             cursor: pointer;
