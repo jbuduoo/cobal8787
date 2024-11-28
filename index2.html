@@ -46,27 +46,34 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
+        #big-image-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        #big-image-modal.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <!-- 新增圖片 -->
     <div id="customer-list" class="customer-list"></div>
 
     <div class="container">
+        <h2>動態按鈕範例</h2>
         <div id="button-container" class="button-grid"></div>
     </div>
 
-    <!-- 模態框 -->
     <div id="big-image-modal">
         <img id="big-image" src="" alt="大圖顯示">
     </div>
 
-    <div class="container">
-        <h2>動態按鈕範例</h2>
-        <div id="button-container"></div>
-    </div>
-
-    <!-- Modal -->
     <div class="modal-overlay" id="modal-overlay"></div>
     <div class="modal" id="dataModal">
         <h3>填寫資料</h3>
@@ -86,14 +93,13 @@
     </div>
 
     <script>
-
-const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0";
+        const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0";
         const gid = "0";
         const sheetCSVUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=${gid}`;
+        const scriptURL = "https://script.google.com/macros/s/AKfycbz-4spX6uoTc_4qrSaFxFn4LHomVpeE0rdDQC19oiks1ZDHBWJtTlU90ewERa6AwcI/exec";
         let rows = null;
         const manId = 3;
 
-        // 取得 Google Sheets 資料並渲染客戶列表
         async function fetchAndRenderCustomerList() {
             try {
                 const response = await fetch(sheetCSVUrl);
@@ -102,12 +108,12 @@ const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0";
 
                 if (rows && rows.length > 0) {
                     const customerList = document.getElementById('customer-list');
-                    let row = rows[manId];
+                    const row = rows[manId];
                     let id = "";
 
                     if (row[1] && row[1].includes('file/d/') && row[1].includes('/view?')) {
-                        let index = row[1].indexOf('file/d/') + 7;
-                        let index2 = row[1].indexOf('/view?');
+                        const index = row[1].indexOf('file/d/') + 7;
+                        const index2 = row[1].indexOf('/view?');
                         id = row[1].substring(index, index2);
                         id = 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1920';
                     }
@@ -116,29 +122,12 @@ const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0";
                     card.className = 'customer-card';
                     card.innerHTML = `<img src="${id}" alt="客戶圖片">`;
                     customerList.appendChild(card);
-
-                    // 點擊圖片放大
-                    card.querySelector("img").addEventListener("click", () => {
-                        const modal = document.getElementById("big-image-modal");
-                        const bigImage = document.getElementById("big-image");
-                        bigImage.src = id;
-                        modal.classList.add("active");
-                    });
                 }
             } catch (error) {
                 console.error("讀取 Google Sheets 時發生錯誤:", error);
             }
         }
 
-        // 點擊模態框關閉
-        document.getElementById('big-image-modal').addEventListener('click', () => {
-            const modal = document.getElementById('big-image-modal');
-            modal.classList.remove('active');
-        });
-
-        const scriptURL = "https://script.google.com/macros/s/AKfycbz-4spX6uoTc_4qrSaFxFn4LHomVpeE0rdDQC19oiks1ZDHBWJtTlU90ewERa6AwcI/exec";
-
-        // 按鈕生成邏輯
         function generateButtons() {
             if (!rows || rows.length <= manId) return;
 
@@ -148,19 +137,19 @@ const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0";
 
             const row = rows[manId];
             for (let colIndex = 5; colIndex <= 11; colIndex++) {
-                row[colIndex] = row[colIndex].replace(/"/g, "").trim();
+                const value = (row[colIndex] || "").replace(/"/g, "").trim();
                 const button = document.createElement("button");
                 button.textContent = columns[colIndex - 5];
 
-                if (row[colIndex] === 'N') {
+                if (value === 'N') {
                     button.disabled = true;
-                } else if (row[colIndex] && row[colIndex].length > 1) {
-                    button.textContent += ` (${row[colIndex]})`;
+                } else if (value) {
+                    button.textContent += ` (${value})`;
                 }
 
                 button.onclick = () => {
                     if (!button.disabled) {
-                        openModal(columns[colIndex - 5]); // 打開對話框，並傳入項目名稱
+                        openModal(columns[colIndex - 5]);
                     }
                 };
 
@@ -168,36 +157,27 @@ const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0";
             }
         }
 
-        // 打開 Modal 並顯示當前操作
         function openModal(operation) {
             const modal = document.getElementById("dataModal");
             const overlay = document.getElementById("modal-overlay");
-
             modal.style.display = "block";
             overlay.style.display = "block";
 
-            // 自動填入項目名稱
             document.getElementById("item").value = operation;
+            document.getElementById("phone").value = "";
+            document.getElementById("demand").value = "";
 
-            // 設定提交按鈕的事件
             document.getElementById("submitButton").onclick = () => submitData(operation);
         }
 
-        // 關閉 Modal
         function closeModal() {
-            const modal = document.getElementById("dataModal");
-            const overlay = document.getElementById("modal-overlay");
-
-            modal.style.display = "none";
-            overlay.style.display = "none";
+            document.getElementById("dataModal").style.display = "none";
+            document.getElementById("modal-overlay").style.display = "none";
         }
 
-        // 提交數據到 Google Apps Script
         function submitData(operation) {
             const form = document.getElementById("dataForm");
             const formData = new FormData(form);
-
-            // 添加操作名稱作為額外參數
             formData.append("operation", operation);
 
             fetch(scriptURL, {
@@ -206,8 +186,8 @@ const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0";
             })
             .then(response => {
                 alert("表單已成功提交！");
-                form.reset(); // 重置表單
-                closeModal(); // 關閉對話框
+                form.reset();
+                closeModal();
             })
             .catch(error => {
                 alert("提交失敗，請稍後再試！");
@@ -215,8 +195,9 @@ const sheetID = "1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0";
             });
         }
 
-        // 初始化
         document.getElementById("closeButton").addEventListener("click", closeModal);
+
+        fetchAndRenderCustomerList();
         generateButtons();
     </script>
 </body>
