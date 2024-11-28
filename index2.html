@@ -131,7 +131,11 @@
     <script>
         const sheetCSVUrl = "https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv&gid=0";
         let rows = null;
-        const manId = 3;
+ 
+        // 取得 URL 的查詢參數
+        const urlParams = new URLSearchParams(window.location.search);
+        // 獲取 num 的值
+        const manId = urlParams.get('num');
 
         async function fetchAndRenderCustomerList() {
             try {
