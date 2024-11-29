@@ -3,82 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>簡易計算機</title>
+    <title>Google Login Example</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        .container {
             text-align: center;
             margin-top: 50px;
         }
-        .calculator {
-            display: inline-block;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .display {
-            width: 100%;
-            height: 50px;
-            font-size: 20px;
-            text-align: right;
-            margin-bottom: 10px;
-            padding: 5px;
-        }
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-        .button {
-            padding: 15px;
-            font-size: 18px;
-            cursor: pointer;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="calculator">
-        <input type="text" id="display" class="display" disabled>
-        <div class="buttons">
-            <button class="button" onclick="press('7')">7</button>
-            <button class="button" onclick="press('8')">8</button>
-            <button class="button" onclick="press('9')">9</button>
-            <button class="button" onclick="press('/')">/</button>
-            <button class="button" onclick="press('4')">4</button>
-            <button class="button" onclick="press('5')">5</button>
-            <button class="button" onclick="press('6')">6</button>
-            <button class="button" onclick="press('*')">*</button>
-            <button class="button" onclick="press('1')">1</button>
-            <button class="button" onclick="press('2')">2</button>
-            <button class="button" onclick="press('3')">3</button>
-            <button class="button" onclick="press('-')">-</button>
-            <button class="button" onclick="press('0')">0</button>
-            <button class="button" onclick="press('.')">.</button>
-            <button class="button" onclick="calculate()">=</button>
-            <button class="button" onclick="press('+')">+</button>
-            <button class="button" onclick="clearDisplay()">C</button>
+    <div class="container">
+        <h1>Google 登錄示例</h1>
+        <!-- Google 登錄按鈕 -->
+        <div id="g_id_onload"
+            data-client_id="520298354348-dcib1u7qp2bmhkvbi3vmnijdf5eusakv.apps.googleusercontent.com"
+            data-context="signin"
+            data-ux_mode="popup"
+            data-login_uri="https://jbuduoo.github.io/cobal8787/"
+            data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+            data-type="standard"
+            data-shape="rectangular"
+            data-theme="outline"
+            data-text="signin_with"
+            data-size="large">
+        </div>
+
+        <!-- 登錄成功後的用戶信息 -->
+        <div id="user-info" class="hidden">
+            <h2>歡迎, <span id="user-name"></span></h2>
+            <p>Email: <span id="user-email"></span></p>
+            <button onclick="logout()">登出</button>
         </div>
     </div>
 
     <script>
-        let display = document.getElementById("display");
+        function handleCredentialResponse(response) {
+            // 解碼 ID token 並提取用戶信息
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            document.getElementById("user-info").classList.remove("hidden");
+            document.getElementById("user-name").textContent = payload.name;
+            document.getElementById("user-email").textContent = payload.email;
 
-        function press(value) {
-            display.value = display.value + value;
+            // 隱藏登錄按鈕
+            document.querySelectorAll(".g_id_signin").forEach(btn => btn.style.display = "none");
         }
 
-        function calculate() {
-            try {
-                display.value = eval(display.value);
-            } catch (e) {
-                display.value = "錯誤";
-            }
+        function logout() {
+            // 清除用戶信息並顯示登錄按鈕
+            document.getElementById("user-info").classList.add("hidden");
+            document.querySelectorAll(".g_id_signin").forEach(btn => btn.style.display = "block");
         }
 
-        function clearDisplay() {
-            display.value = "";
-        }
+        // 初始化 Google 登錄
+        window.onload = () => {
+            google.accounts.id.initialize({
+                client_id: "520298354348-dcib1u7qp2bmhkvbi3vmnijdf5eusakv.apps.googleusercontent.com", // 替換為您的 Google 客戶端 ID
+                callback: handleCredentialResponse
+            });
+            google.accounts.id.prompt(); // 自動彈出登錄提示
+        };
     </script>
 </body>
 </html>
