@@ -41,15 +41,20 @@
     </div>
 
     <script>
+
         function handleCredentialResponse(response) {
-            // 解碼 ID token 並提取用戶信息
-            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            const payload = JSON.parse(atob(response.credential.split('.')[1])); // 解碼 ID Token
             console.log('User Info:', payload);
 
             // 驗證成功後顯示首頁內容
             document.getElementById("login-container").classList.add("hidden");
             document.getElementById("homepage-container").classList.remove("hidden");
+
+            // 渲染用戶信息
+            document.getElementById("user-name").textContent = payload.name;
+            document.getElementById("user-email").textContent = payload.email;
         }
+
 
         function logout() {
             // 登出時隱藏首頁內容，顯示登錄按鈕
