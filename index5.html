@@ -69,8 +69,13 @@
         }
 
         function gotoSecondPage() {
-            window.location.href = "index6.html";
-        }
+            const user = localStorage.getItem('user');
+            if (user) {
+                window.location.href = "index6.html";
+            } else {
+                alert("請先登錄");
+            }
+}
 
         // 初始化 Google 登錄並檢查登錄狀態
         window.onload = () => {
