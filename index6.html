@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第二頁 - 登錄檢查</title>
+    <script>
+        window.onload = () => {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                window.location.href = 'index5.html'; // 返回登錄頁
+            } else {
+                const payload = JSON.parse(user);
+                document.getElementById("user-name").textContent = payload.name;
+                document.getElementById("user-email").textContent = payload.email;
+            }
+        };
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'index3.html';
+        }
+
+        function goBackToPreviousPage() {
+            window.history.back(); // 返回上一頁
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>第二頁</h1>
+        <p>歡迎, <span id="user-name"></span></p>
+        <p>Email: <span id="user-email"></span></p>
+        <button onclick="goBackToPreviousPage()">返回上一頁</button>
+        <button onclick="logout()">登出</button>
+    </div>
+</body>
+</html>

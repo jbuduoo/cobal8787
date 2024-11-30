@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google 登錄示例</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Google 登錄示例</h1>
+
+        <!-- 登錄按鈕 -->
+        <div id="login-container">
+            <div id="g_id_onload"
+                data-client_id="520298354348-dcib1u7qp2bmhkvbi3vmnijdf5eusakv.apps.googleusercontent.com"
+                data-login_uri="https://jbuduoo.github.io/cobal8787"
+                data-ux_mode="popup"
+                data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin"
+                data-type="standard"
+                data-shape="rectangular"
+                data-theme="outline"
+                data-text="signin_with"
+                data-size="large">
+            </div>
+        </div>
+
+        <!-- 首頁內容 -->
+        <div id="homepage-container" class="hidden">
+            <h2>歡迎, <span id="user-name"></span></h2>
+            <p>Email: <span id="user-email"></span></p>
+            <button onclick="gotoSecondPage()">跳轉到第二頁</button>
+            <button onclick="logout()">登出</button>
+        </div>
+    </div>
+
+    <script>
+        function handleCredentialResponse(response) {
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            console.log('用戶信息:', payload);
+
+            // 將用戶信息存入 Local Storage
+            localStorage.setItem('user', JSON.stringify(payload));
+
+            // 顯示首頁內容，隱藏登錄按鈕
+            document.getElementById("login-container").classList.add("hidden");
+            document.getElementById("homepage-container").classList.remove("hidden");
+
+            // 設置用戶信息
+            document.getElementById("user-name").textContent = payload.name;
+            document.getElementById("user-email").textContent = payload.email;
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            document.getElementById("login-container").classList.remove("hidden");
+            document.getElementById("homepage-container").classList.add("hidden");
+        }
+
+        function gotoSecondPage() {
+            window.location.href = "index6.html";
+        }
+
+        // 初始化 Google 登錄
+        window.onload = () => {
+            google.accounts.id.initialize({
+                client_id: "520298354348-dcib1u7qp2bmhkvbi3vmnijdf5eusakv.apps.googleusercontent.com", // 替換為您的 Google Client ID
+                callback: handleCredentialResponse
+            });
+            google.accounts.id.prompt();
+        };
+    </script>
+</body>
+</html>
