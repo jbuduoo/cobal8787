@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>響應式按鈕設計</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 每行 3 個按鈕 */
+            gap: 15px; /* 按鈕之間的間距 */
+            padding: 20px;
+        }
+        button {
+            width: calc(100% - 30px); /* 填滿行寬，留出邊距 */
+            max-width: 300px; /* 最大寬度 300px */
+            height: 50px; /* 固定高度 */
+            font-size: calc(1em + 1vw); /* 文字大小隨螢幕寬度調整 */
+            background-color: #4CAF50; /* 綠色背景 */
+            color: white; /* 文字顏色 */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+        /* 手機和小畫面設計 */
+        @media (max-width: 768px) {
+            .button-grid {
+                grid-template-columns: 1fr; /* 每行顯示 1 個按鈕 */
+            }
+            button {
+                font-size: 16px; /* 手機上文字大小固定 */
+                height: 60px; /* 手機上按鈕高度增加 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>響應式按鈕設計</h1>
+    <div class="button-grid">
+        <button>叫布</button>
+        <button disabled>裁布</button>
+        <button>物料</button>
+        <button>LOGO工法</button>
+        <button>車工</button>
+        <button>打扣/整燙</button>
+        <button>清點+裝箱</button>
+    </div>
+</body>
+</html>

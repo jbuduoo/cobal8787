@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動態按鈕與表單提交</title>
+    <style>
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .customer-card img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            justify-items: stretch;
+            margin-top: 20px;
+        }
+        button {
+            width: 100%;
+            height: 70px;
+            font-size: 18px;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            cursor: pointer;
+            background-color: hsl(124, 67%, 75%);
+            color: #000000;
+            padding: 0;
+            white-space: normal; /* 允許換行 */
+            word-break: break-word; /* 長單詞換行 */
+        }
+        button:disabled {
+            background-color: #ccc;
+            color: #000000;
+            cursor: not-allowed;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        #big-image-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        #big-image-modal.active {
+            display: block;
+        }
+        .modal-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .modal-buttons button {
+            height: 35px;
+            font-size: 14px;
+            background-color: hsl(124, 67%, 75%);
+            color: #000000;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .modal-buttons button:hover {
+            background-color: hsl(124, 67%, 65%);
+        }
+        .modal-buttons button:disabled {
+            background-color: #ccc;
+            color: #000000;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- 回首頁按鈕 -->
+    <div style="text-align: center; margin-top: 10px;margin-bottom: 5px;">
+        <button 
+            onclick="location.href='https://jbuduoo.github.io/cobal8787/'" 
+            style="
+                font-size: 18px; 
+                color: #ffffff; 
+                background-color: hsl(124, 67%, 45%);
+                border: none;
+                border-radius: 5px;
+                padding: 10px 20px;
+                cursor: pointer;
+            ">
+            回首頁
+        </button>
+    </div>
+
+    <div id="customer-list" class="customer-list"></div>
+
+    <div class="container">
+        <div id="button-container" class="button-grid"></div>
+    </div>
+
+    <div id="big-image-modal">
+        <img id="big-image" src="" alt="大圖顯示">
+    </div>
+
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal" id="dataModal">
+        <h3>填寫資料</h3>
+        <form id="dataForm">
+            <label for="orderNumber">案件編號：</label>
+            <input type="text" id="orderNumber" name="entry.1495441973" required><br>
+            <label for="item">施工項目：</label>
+            <input type="text" id="item" name="entry.609461637" readonly><br>
+            <label for="employee">員工編號：</label>
+            <input type="text" id="employee" name="entry.1735934499" required><br>
+            <div class="modal-buttons">
+                <button type="button" id="submitButton">提交</button>
+                <button type="button" id="closeButton">取消</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const sheetCSVUrl = "https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv&gid=0";
+        let rows = null;
+
+        // 取得 URL 的查詢參數
+        const urlParams = new URLSearchParams(window.location.search);
+        const manId = urlParams.get('num');
+        let row = null;
+
+        async function fetchAndRenderCustomerList() {
+            try {
+                const response = await fetch(sheetCSVUrl);
+                const csvText = await response.text();
+                rows = csvText.split("\n").map(row => row.split(","));
+
+                if (rows && rows.length > 0) {
+                    const customerList = document.getElementById('customer-list');
+
+                    for (const rowNum of rows) {
+                        const cleanValue = rowNum[0].replace(/"/g, "").trim();
+                        if (cleanValue === String(manId)) {
+                            row = rowNum;
+                            break;
+                        }
+                    }
+
+                    if (!row) {
+                        console.error("找不到符合 manId 的資料！");
+                        return;
+                    }
+
+                    let id = "";
+                    if (row[1] && row[1].includes('file/d/') && row[1].includes('/view?')) {
+                        const index = row[1].indexOf('file/d/') + 7;
+                        const index2 = row[1].indexOf('/view?');
+                        id = row[1].substring(index, index2);
+                        id = `https://drive.google.com/thumbnail?id=${id}&sz=w860`;
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = 'customer-card';
+                    card.innerHTML = `<img src="${id}" alt="客戶圖片">`;
+                    customerList.appendChild(card);
+
+                    generateButtons();
+                }
+            } catch (error) {
+                console.error("讀取 Google Sheets 時發生錯誤:", error);
+            }
+        }
+
+        function generateButtons() {
+            const columns = ["叫布", "裁布", "物料", "LOGO工法", "車工", "打扣/整燙", "清點+裝箱"];
+            const buttonContainer = document.getElementById("button-container");
+            buttonContainer.innerHTML = "";
+
+            for (let colIndex = 5; colIndex <= 11; colIndex++) {
+                const value = (row[colIndex] || "").replace(/"/g, "").trim();
+                const button = document.createElement("button");
+                button.textContent = columns[colIndex - 5];
+
+                if (value === 'N') {
+                    button.disabled = true;
+                } else if (value) {
+                    button.textContent += `(${value})`;
+                }
+
+                button.onclick = () => {
+                    if (!button.disabled) {
+                        openModal(columns[colIndex - 5]);
+                    }
+                };
+
+                buttonContainer.appendChild(button);
+            }
+        }
+
+        function openModal(operation) {
+            const modal = document.getElementById("dataModal");
+            const overlay = document.getElementById("modal-overlay");
+            modal.style.display = "block";
+            overlay.style.display = "block";
+
+            document.getElementById("orderNumber").value = manId;
+            document.getElementById("item").value = operation;
+            document.getElementById("employee").value = "";
+            document.getElementById("submitButton").onclick = () => submitData(operation);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("dataModal");
+            const overlay = document.getElementById("modal-overlay");
+            modal.style.display = "none";
+            overlay.style.display = "none";
+        }
+
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzusEHfW4sg-T3djuB_jqayEzSGiPgSYlslo2MO_JKyS6oi-xbZ9wn3nAUTEi3I7em_/exec";
+
+        function submitData(operation) {
+            const form = document.getElementById("dataForm");
+            const formData = new FormData(form);
+            formData.append("operation", operation);
+
+            fetch(scriptURL, {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => {
+                alert("表單已成功提交！");
+                form.reset();
+                location.reload(); // 提交後重新整理頁面
+            })
+            .catch(error => {
+                alert("提交失敗，請稍後再試！");
+                console.error("Error!", error.message);
+            });
+        }
+
+        document.getElementById("closeButton").addEventListener("click", closeModal);
+
+        fetchAndRenderCustomerList();
+    </script>
+</body>
+</html>
