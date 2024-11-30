@@ -75,7 +75,7 @@
             } else {
                 alert("請先登錄");
             }
-}
+        }
 
         // 初始化 Google 登錄並檢查登錄狀態
         window.onload = () => {
@@ -91,7 +91,7 @@
             } else {
                 // 初始化 Google 登錄
                 google.accounts.id.initialize({
-                    client_id: "520298354348-dcib1u7qp2bmhkvbi3vmnijdf5eusakv.apps.googleusercontent.com", // 替換為您的 Google Client ID
+                    client_id: "520298354348-dcib1u7qp2bmhkvbi3vmnijdf5eusakv.apps.googleusercontent.com",
                     callback: handleCredentialResponse
                 });
                 google.accounts.id.prompt();
