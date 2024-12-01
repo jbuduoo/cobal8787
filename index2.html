@@ -28,18 +28,21 @@
         .logout-btn:hover {
             background-color: #0056b3;
         }
-        .back-to-Home{
-            width: 100%;
-            height: 70px;
-            font-size: 18px;
-            border: 1px solid #ddd;
-            border-radius: 2px;
-            cursor: pointer;
-            background-color: hsl(124, 67%, 75%);
-            color: #000000;
-            padding: 0;
+        .back-to-Home {
+            display: block; /* 將按鈕設置為區塊元素以居中 */
+            margin: 10px auto 5px auto; /* 控制上、下的間距，左右居中 */
+            width: auto; /* 按需調整寬度 */
+            height: 70px; /* 按鈕高度 */
+            font-size: 18px; /* 字體大小 */
+            border: none; /* 移除邊框 */
+            border-radius: 5px; /* 圓角邊框 */
+            cursor: pointer; /* 鼠標移動到按鈕變成手指 */
+            background-color: hsl(124, 67%, 45%); /* 背景色 */
+            color: #ffffff; /* 字體顏色 */
+            padding: 10px 20px; /* 內間距 */
             white-space: normal; /* 允許換行 */
             word-break: break-word; /* 長單詞換行 */
+            text-align: center; /* 文本居中 */
         }
 
         .customer-card img {
@@ -123,18 +126,8 @@
             <button id="logout-btn" class="logout-btn hidden" onclick="logout()">登出</button>
         </div>
         <!-- 回首頁按鈕 -->
-        <div style="text-align: center; margin-top: 10px;margin-bottom: 5px;">
-            <button id="back-to-Home" 
-                onclick="location.href='https://jbuduoo.github.io/cobal8787/'" 
-                style="
-                    font-size: 18px; 
-                    color: #ffffff; 
-                    background-color: hsl(124, 67%, 45%);
-                    border: none;
-                    border-radius: 5px;
-                    padding: 10px 20px;
-                    cursor: pointer;
-                ">
+        <div>
+            <button id="back-to-Home" class="back-to-Home" onclick="location.href='https://jbuduoo.github.io/cobal8787/'">
                 回首頁
             </button>
         </div>
