@@ -10,24 +10,25 @@
         }
         .header {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
             background-color: #f1f1f1;
             border-bottom: 1px solid #ddd;
         }
         .logout-btn {
-            width: 80%; /* 與列表的寬度相同 */
-            padding: 10px 20px;
+            padding: 5px 10px;
             background-color: #007bff;
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin: 10px auto; /* 上下距離縮短 */
         }
         .logout-btn:hover {
             background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
         }
         .container {
             text-align: center;
@@ -37,7 +38,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 10px; /* 縮短與按鈕之間的距離 */
+            margin-top: 20px;
         }
         .customer-card {
             display: flex;
@@ -47,7 +48,7 @@
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            width: 80%; /* 與登出按鈕的寬度相同 */
+            width: 80%;
             background-color: #f9f9f9;
         }
         .customer-card img {
@@ -76,6 +77,7 @@
 
     <!-- 登入表單 -->
     <div id="login-container">
+        <h1>自建登入系統</h1>
         <label for="username">帳號:</label>
         <input type="text" id="username"><br><br>
         <label for="password">密碼:</label>
@@ -85,6 +87,7 @@
 
     <!-- 登入成功畫面 -->
     <div id="homepage-container" class="hidden">
+        <p>請選擇客戶列表</p>
     </div>
 
     <div id="customer-list" class="customer-list"></div>
