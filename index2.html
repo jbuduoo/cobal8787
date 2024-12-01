@@ -160,7 +160,8 @@
         </div>
 
     <script>
-                const sheetCSVUrl = "https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv&gid=0";
+        //搜尋表單的內容
+        const sheetCSVUrl = "https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv&gid=0";
         let rows = null;
 
         // 取得 URL 的查詢參數
@@ -254,8 +255,8 @@
             modal.style.display = "none";
             overlay.style.display = "none";
         }
-
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzusEHfW4sg-T3djuB_jqayEzSGiPgSYlslo2MO_JKyS6oi-xbZ9wn3nAUTEi3I7em_/exec";
+        //回傳到表單
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxDFocz8N5Ia3w1tsfKYQTCv8pyKGFQu9eVbHIUDBy6YLbcSaD1r8LN9kXWbiIYKEBE/exec";
 
         function submitData(operation) {
             const form = document.getElementById("dataForm");
