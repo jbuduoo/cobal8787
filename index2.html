@@ -137,6 +137,8 @@
         <div class="container">
             <div id="button-container" class="button-grid"></div>
         </div>
+
+        <div id="order-list" class="order-list"></div>
     
         <div id="big-image-modal">
             <img id="big-image" src="" alt="大圖顯示">
@@ -172,14 +174,14 @@
         async function fetchAndRenderCustomerList() {
             try {
                 const response = await fetch(sheetCSVUrl);
-                const csvText = await response.text();
+                const csvText = await response.text().replace(/"/g, "").trim();
                 rows = csvText.split("\n").map(row => row.split(","));
 
                 if (rows && rows.length > 0) {
                     const customerList = document.getElementById('customer-list');
 
                     for (const rowNum of rows) {
-                        const cleanValue = rowNum[0].replace(/"/g, "").trim();
+                        const cleanValue = rowNum[0];
                         if (cleanValue === String(manId)) {
                             row = rowNum;
                             break;
@@ -210,6 +212,50 @@
                 console.error("讀取 Google Sheets 時發生錯誤:", error);
             }
         }
+
+        async function fetchAndRenderOrderList() {
+            try {
+                const orderListSheetCSVUrl = "https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv&gid=0";
+
+                const response = await fetch(orderListSheetCSVUrl);
+                const csvText = await response.text();
+                rows = csvText.split("\n").map(row => row.split(","));
+
+                if (rows && rows.length > 0) {
+                    const orderList = document.getElementById('order-list');
+                    let detail = "";
+
+                    rows.forEach(row => {
+                        detail += `
+                            <tr>
+                                <td>${row[0]}</td>
+                                <td>${row[2]}</td>
+                                <td>${row[3]}</td>
+                                <td>${row[4]}</td>
+                            </tr>`;
+                    });
+
+                    let content = `
+                        <h1 style="text-align: center;">Form Responses</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>時間戳記</th>
+                                    <th>訂單編號</th>
+                                    <th>項目名稱</th>
+                                    <th>回報事項</th>
+                                </tr>
+                            </thead>
+                            <tbody>${detail}</tbody>
+                        </table>`;
+
+                    orderList.innerHTML = content; // 替換為 innerHTML
+                }
+            } catch (error) {
+                console.error("讀取 Google Sheets 時發生錯誤:", error);
+            }
+        }
+
 
         function generateButtons() {
             const columns = ["叫布", "裁布", "物料", "LOGO工法", "車工", "打扣/整燙", "清點+裝箱"];
@@ -263,6 +309,11 @@
             const formData = new FormData(form);
             formData.append("operation", operation);
 
+            // 禁用提交按鈕並顯示「處理中」
+            const submitButton = document.getElementById("submitButton");
+            submitButton.disabled = true;
+            submitButton.textContent = "處理中...";
+
             fetch(scriptURL, {
                 method: "POST",
                 body: formData,
@@ -275,12 +326,21 @@
             .catch(error => {
                 alert("提交失敗，請稍後再試！");
                 console.error("Error!", error.message);
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+                submitButton.textContent = "提交"; // 恢復按鈕
             });
         }
 
         document.getElementById("closeButton").addEventListener("click", closeModal);
 
+        //搜尋項目完成列表
         fetchAndRenderCustomerList();
+
+        //搜尋訂單列表
+        fetchAndRenderOrderList();
+
         window.onload = () => {
             const user = localStorage.getItem('user');
             if (!user) {
