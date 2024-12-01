@@ -185,7 +185,7 @@
                 if (rows && rows.length > 0) {
                     const customerList = document.getElementById('customer-list');
                     for (let i = 1; i < rows.length; i++) { // 跳過表頭
-                        let row = rows[i];
+                        let row = rows[i].replace(/"/g, "").trim();
                         if (row.length < 6) continue; // 確保有足夠的欄位
 
                         let id = "";
