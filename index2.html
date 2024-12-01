@@ -9,6 +9,18 @@
             text-align: center;
             margin-top: 20px;
         }
+        .logout-btn {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+        .logout-btn:hover {
+            background-color: #0056b3;
+        }
         .customer-card img {
             width: 100%;
             max-width: 400px;
@@ -103,12 +115,10 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>第二頁</h1>
-        <p>歡迎, <span id="user-name"></span></p>
-        <button onclick="goBackToPreviousPage()">返回首頁</button>
-        <button onclick="logout()">登出</button>
-    </div>
+        <!-- 頁面頂部 -->
+        <div class="container">
+            <button id="logout-btn" class="logout-btn hidden" onclick="logout()">登出</button>
+        </div>
         <!-- 回首頁按鈕 -->
         <div style="text-align: center; margin-top: 10px;margin-bottom: 5px;">
             <button 
