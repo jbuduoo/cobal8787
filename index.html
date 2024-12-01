@@ -10,25 +10,24 @@
         }
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             padding: 10px 20px;
             background-color: #f1f1f1;
             border-bottom: 1px solid #ddd;
         }
         .logout-btn {
-            padding: 5px 10px;
+            width: 80%; /* 與列表的寬度相同 */
+            padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin: 10px auto; /* 上下距離縮短 */
         }
         .logout-btn:hover {
             background-color: #0056b3;
-        }
-        .hidden {
-            display: none;
         }
         .container {
             text-align: center;
@@ -38,7 +37,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 20px;
+            margin-top: 10px; /* 縮短與按鈕之間的距離 */
         }
         .customer-card {
             display: flex;
@@ -48,7 +47,7 @@
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            width: 80%;
+            width: 80%; /* 與登出按鈕的寬度相同 */
             background-color: #f9f9f9;
         }
         .customer-card img {
@@ -84,10 +83,6 @@
         <button onclick="login()">登入</button>
     </div>
 
-    <!-- 登入成功畫面 -->
-    <div id="homepage-container" class="hidden">
-    </div>
-
     <div id="customer-list" class="customer-list"></div>
 
     <script>
@@ -106,7 +101,6 @@
                 localStorage.setItem('user', JSON.stringify(user));
 
                 document.getElementById("login-container").classList.add("hidden");
-                document.getElementById("homepage-container").classList.remove("hidden");
                 document.getElementById("logout-btn").classList.remove("hidden");
                 fetchGoogleSheetCSV();
             } else {
@@ -126,7 +120,6 @@
                 const userInfo = JSON.parse(user);
                 document.getElementById("logout-btn").classList.remove("hidden");
                 document.getElementById("login-container").classList.add("hidden");
-                document.getElementById("homepage-container").classList.remove("hidden");
                 fetchGoogleSheetCSV();
             } else {
                 document.getElementById("login-container").classList.remove("hidden");
