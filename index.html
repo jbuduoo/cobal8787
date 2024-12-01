@@ -196,6 +196,44 @@
                             id = `https://drive.google.com/thumbnail?id=${id}&sz=w1920`;
                         }
 
+                        let font =''
+                        //修改字的顏字
+                        if(row[5] === 'Y'){
+                            <font color="#9900FF"> 1</font>
+                        }else{
+                            font += '1';
+                        }
+                        if(row[6] === 'Y'){
+                            <font color="#9900FF"> 2</font>
+                        }else{
+                            font += '2';
+                        }
+                        if(row[7] === 'Y'){
+                            <font color="#9900FF"> 3</font>
+                        }else{
+                            font += '3';
+                        }
+                        if(row[8] === 'Y'){
+                            <font color="#9900FF"> 4</font>
+                        }else{
+                            font += '4';
+                        }
+                        if(row[9] === 'Y'){
+                            <font color="#9900FF"> 5</font>
+                        }else{
+                            font += '5';
+                        }
+                        if(row[10] === 'Y'){
+                            <font color="#9900FF"> 6</font>
+                        }else{
+                            font += '6';
+                        }
+                        if(row[11] === 'Y'){
+                            <font color="#9900FF"> 7</font>
+                        }else{
+                            font += '7';
+                        }
+
                         const card = document.createElement('div');
                         card.className = 'customer-card';
                         card.innerHTML = `
@@ -205,7 +243,7 @@
                                     ${row[3].replace(/"/g, "").trim()} <br> ${row[2].replace(/"/g, "").trim()}
                                 </a>
                                 <br />
-                                <a> 1 2 3 4 5 6 7 8 9 </a>
+                                <a> ${font} </a>
                             </div>
                         `;
                         card.querySelector("img").addEventListener("click", () => {
