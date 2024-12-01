@@ -185,7 +185,7 @@
                 if (rows && rows.length > 0) {
                     const customerList = document.getElementById('customer-list');
                     for (let i = 1; i < rows.length; i++) { // 跳過表頭
-                        let row = rows[i].replace(/"/g, "").trim();
+                        let row = rows[i];
                         if (row.length < 6) continue; // 確保有足夠的欄位
 
                         let id = "";
@@ -198,37 +198,37 @@
 
                         let font =''
                         //修改字的顏字
-                        if(row[5].length > 0){
+                        if(row[5].replace(/"/g, "").trim().length > 0){
                             font += '<font color="#9900FF"> 1</font>';
                         }else{
                             font += '1';
                         }
-                        if(row[6].length > 0){
+                        if(row[6].replace(/"/g, "").trim().length > 0){
                             font += '<font color="#9900FF"> 2</font>';
                         }else{
                             font += '2';
                         }
-                        if(row[7].length > 0){
+                        if(row[7].replace(/"/g, "").trim().length > 0){
                             font += '<font color="#9900FF"> 3</font>';
                         }else{
                             font += '3';
                         }
-                        if(row[8].length > 0){
+                        if(row[8].replace(/"/g, "").trim().length > 0){
                             font += '<font color="#9900FF"> 4</font>';
                         }else{
                             font += '4';
                         }
-                        if(row[9].length > 0){
+                        if(row[9].replace(/"/g, "").trim().length > 0){
                             font += '<font color="#9900FF"> 5</font>';
                         }else{
                             font += '5';
                         }
-                        if(row[10].length > 0){
+                        if(row[10].replace(/"/g, "").trim().length > 0){
                             font += '<font color="#9900FF"> 6</font>';
                         }else{
                             font += '6';
                         }
-                        if(row[11].length > 0){
+                        if(row[11].replace(/"/g, "").trim().length > 0){
                             font += '<font color="#9900FF"> 7</font>';
                         }else{
                             font += '7';
