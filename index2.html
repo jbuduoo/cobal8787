@@ -214,8 +214,8 @@
         }
 
         async function fetchAndRenderOrderList() {
-            try {
-                const orderListSheetCSVUrl = "https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv&gid=0";
+            try {                                          
+                const orderListSheetCSVUrl = "https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv&gid=71174126";
 
                 const response = await fetch(orderListSheetCSVUrl);
                 const csvText = await response.text();
