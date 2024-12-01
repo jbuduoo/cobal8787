@@ -59,6 +59,11 @@
             justify-items: stretch;
             margin-top: 20px;
         }
+
+        .button99 {
+            height: 20px;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -300,6 +305,8 @@
                 const value = (row[colIndex] || "").replace(/"/g, "").trim();
                 const button = document.createElement("button");
                 button.textContent = columns[colIndex - 5];
+                // 新增 button99 class
+                button.classList.add("button99");
 
                 if (value === 'N') {
                     button.disabled = true;
