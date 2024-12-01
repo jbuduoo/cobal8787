@@ -170,6 +170,7 @@
             padding: 8px; /* 單元格內間距 */
             border: 1px solid #ddd; /* 單元格邊框 */
             text-align: left; /* 文字靠左對齊 */
+            
         }
 
         .order-list th {
@@ -207,10 +208,14 @@
             <form id="dataForm">
                 <label for="orderNumber">案件編號：</label>
                 <input type="text" id="orderNumber" name="entry.1495441973" required><br>
-                <label for="item">施工項目：</label>
+                <label for="item">工作項目：</label>
                 <input type="text" id="item" name="entry.609461637" readonly><br>
-                <label for="employee">員工編號：</label>
+                <label for="employee">處理人員：</label>
                 <input type="text" id="employee" name="entry.1735934499" required><br>
+                <label for="returns">回報事項：</label>
+                <input type="text" id="returns" name="entry.1735934499" required><br>
+                <label for="isCompletion">是否完成：</label>
+                <input type="text" id="isCompletion" name="entry.1735934499" required><br>
                 <div class="modal-buttons">
                     <button type="button" id="submitButton">提交</button>
                     <button type="button" id="closeButton">取消</button>
@@ -351,7 +356,9 @@
 
             document.getElementById("orderNumber").value = manId;
             document.getElementById("item").value = operation;
-            document.getElementById("employee").value = "";
+            document.getElementById("employee").value = username;
+            document.getElementById("returns").value = "";
+            document.getElementById("isCompletion").value = "";
             document.getElementById("submitButton").onclick = () => submitData(operation);
         }
 
@@ -400,7 +407,7 @@
 
         //搜尋訂單列表
         fetchAndRenderOrderList();
-
+        let username =null;
         window.onload = () => {
             const user = localStorage.getItem('user');
             if (!user) {
@@ -408,6 +415,7 @@
                 window.location.href = "index.html";
             } else {
                 const userInfo = JSON.parse(user);
+                username = userInfo.name;
                 document.getElementById("user-name").textContent = userInfo.name;
             }
         };
