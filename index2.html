@@ -21,6 +21,20 @@
         .logout-btn:hover {
             background-color: #0056b3;
         }
+        .back-to-Home{
+            width: 100%;
+            height: 70px;
+            font-size: 18px;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            cursor: pointer;
+            background-color: hsl(124, 67%, 75%);
+            color: #000000;
+            padding: 0;
+            white-space: normal; /* 允許換行 */
+            word-break: break-word; /* 長單詞換行 */
+        }
+
         .customer-card img {
             width: 100%;
             max-width: 400px;
@@ -34,24 +48,6 @@
             gap: 10px;
             justify-items: stretch;
             margin-top: 20px;
-        }
-        button {
-            width: 100%;
-            height: 70px;
-            font-size: 18px;
-            border: 1px solid #ddd;
-            border-radius: 2px;
-            cursor: pointer;
-            background-color: hsl(124, 67%, 75%);
-            color: #000000;
-            padding: 0;
-            white-space: normal; /* 允許換行 */
-            word-break: break-word; /* 長單詞換行 */
-        }
-        button:disabled {
-            background-color: #ccc;
-            color: #000000;
-            cursor: not-allowed;
         }
         .modal {
             display: none;
@@ -121,7 +117,7 @@
         </div>
         <!-- 回首頁按鈕 -->
         <div style="text-align: center; margin-top: 10px;margin-bottom: 5px;">
-            <button 
+            <button id="back-to-Home" 
                 onclick="location.href='https://jbuduoo.github.io/cobal8787/'" 
                 style="
                     font-size: 18px; 
