@@ -157,6 +157,23 @@
 
         .order-list {
             margin-top: 20px;
+            width: 100%; /* 容器寬度隨螢幕變化 */
+            overflow-x: auto; /* 在內容過多時顯示水平滾動條 */
+        }
+
+        .order-list table {
+            width: 100%; /* 表格寬度自動撐滿父容器 */
+            border-collapse: collapse; /* 合併邊框，讓表格看起來更美觀 */
+        }
+
+        .order-list th, .order-list td {
+            padding: 8px; /* 單元格內間距 */
+            border: 1px solid #ddd; /* 單元格邊框 */
+            text-align: left; /* 文字靠左對齊 */
+        }
+
+        .order-list th {
+            background-color: #f2f2f2; /* 表頭背景顏色 */
         }
     </style>
 </head>
