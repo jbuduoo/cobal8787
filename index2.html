@@ -118,6 +118,41 @@
             color: #000000;
             cursor: not-allowed;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse; /* 去掉多餘的邊框間距 */
+            margin: 20px auto; /* 上下留白，居中 */
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #333;
+            background-color: #f9f9f9; /* 表格背景 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+        }
+
+        th, td {
+            border: 1px solid #ddd; /* 單元格邊框 */
+            padding: 10px 15px; /* 內間距 */
+            text-align: left; /* 左對齊文字 */
+        }
+
+        th {
+            background-color: #007bff; /* 表頭背景色 */
+            color: white; /* 表頭文字顏色 */
+            text-transform: uppercase; /* 表頭文字大寫 */
+            font-weight: bold; /* 加粗表頭文字 */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* 偶數行背景色 */
+        }
+
+        tr:hover {
+            background-color: #e0e0e0; /* 滑鼠懸停行背景色 */
+        }
+
+        .order-list {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -236,8 +271,7 @@
                     });
 
                     let content = `
-                        <h1 style="text-align: center;">Form Responses</h1>
-                        <table>
+                        <table id='order-list class='order-list >
                             <thead>
                                 <tr>
                                     <th>時間戳記</th>
