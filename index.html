@@ -206,8 +206,7 @@
             try {
                 const response = await fetch(sheetCSVUrl);
                 const csvText = await response.text();
-                const rows = csvText.split("\n").map(row => row.split(","));
-
+                const rows = csvText.split("\n").map(row => row.split(",").map(cell => cell.replace(/"/g, "").trim()));
                 // 排序邏輯
                 const header = rows.shift(); // 保存表頭
                 const sortedRows = rows.sort((a, b) => {
@@ -221,12 +220,12 @@
                     }
 
                     // 更新時間欄位索引為 6
-                    const timeA = a[6]?.trim();
-                    const timeB = b[6]?.trim();
+                    const timeA = new Date(a[6]?.trim().replace(" ", "T")); // 確保格式 YYYY-MM-DDTHH:mm:ss
+                    const timeB = new Date(b[6]?.trim().replace(" ", "T"));
 
                     // 排序有 `time` 欄位的資料
                     if (timeA && timeB) {
-                        return new Date(timeB) - new Date(timeA); // 按時間從新到舊排序
+                        return timeB - timeA; // 按時間新到舊排序
                     } else if (timeA) {
                         return -1; // 有 `time` 的排在前
                     } else if (timeB) {
