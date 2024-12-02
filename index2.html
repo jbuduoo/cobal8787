@@ -219,7 +219,6 @@
                 <input type="text" id="returns" name="entry.153807260" required><br>
                 <label for="isCompletion">是否完成：</label>
                     <select id="returns" name="entry.499125338" required>
-                        <option value="">請選擇</option>
                         <option value="已完成">已完成</option>
                         <option value="處理中">處理中</option>
                         <option value="有狀況">有狀況</option>
@@ -369,7 +368,7 @@
             document.getElementById("item").value = operation;
             document.getElementById("employee").value = username;
             document.getElementById("returns").value = "";
-            document.getElementById("isCompletion").value = "";
+            document.getElementById("isCompletion").value = "處理中";
 
             // 綁定提交按鈕事件
             const submitButton = document.getElementById("submitButton");
@@ -404,21 +403,21 @@
                 method: "POST",
                 body: formData,
             })
-                .then(response => {
-                    if (!response.ok) throw new Error("網絡錯誤");
-                    alert("表單已成功提交！");
-                    form.reset(); // 重置表單
-                    closeModal(); // 關閉模態框
-                    location.reload(); // 提交後重新整理頁面
-                })
-                .catch(error => {
-                    alert("提交失敗，請稍後再試！");
-                    console.error("提交錯誤！", error);
-                })
-                .finally(() => {
-                    submitButton.disabled = false;
-                    submitButton.textContent = "提交"; // 恢復按鈕狀態
-                });
+            .then(response => {
+                if (!response.ok) throw new Error("網絡錯誤");
+                alert("表單已成功提交！");
+                form.reset(); // 重置表單
+                closeModal(); // 關閉模態框
+                location.reload(); // 提交後重新整理頁面
+            })
+            .catch(error => {
+                alert("提交失敗，請稍後再試！");
+                console.error("提交錯誤！", error);
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+                submitButton.textContent = "提交"; // 恢復按鈕狀態
+            });
         }
 
         document.getElementById("closeButton").addEventListener("click", closeModal);
