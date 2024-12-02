@@ -209,6 +209,7 @@
                 const rows = csvText.split("\n").map(row => row.split(","));
 
                 // 排序邏輯
+                const header = rows.shift(); // 保存表頭
                 const sortedRows = rows.sort((a, b) => {
                     // 急件欄位索引為 5
                     const isUrgentA = a[5]?.trim().toUpperCase() === "Y" ? 1 : 0;
