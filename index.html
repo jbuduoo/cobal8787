@@ -213,8 +213,8 @@
                 const header = rows.shift(); // 保存表頭
                 const sortedRows = rows.sort((a, b) => {
                     // 取得「急件」和「更新時間」的索引
-                    const isUrgentA = a[5]?.trim() === "Y" ? 1 : 0; // 判斷急件
-                    const isUrgentB = b[5]?.trim() === "Y" ? 1 : 0;
+                    const isUrgentA = a[5]?.replace(/"/g, "").trim() === "Y" ? 1 : 0; // 判斷急件
+                    const isUrgentB = b[5]?.replace(/"/g, "").trim() === "Y" ? 1 : 0;
 
                     // 比較急件優先級
                     if (isUrgentA !== isUrgentB) {
@@ -222,8 +222,8 @@
                     }
 
                     // 比較更新時間（G 欄，索引 6），按降序排列
-                    const timeA = new Date(a[6]?.trim());
-                    const timeB = new Date(b[6]?.trim());
+                    const timeA = new Date(a[6]?.replace(/"/g, "").trim());
+                    const timeB = new Date(b[6]?.replace(/"/g, "").trim());
                     return timeB - timeA; // 更新時間新的排在前面
                 });
 
