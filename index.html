@@ -208,23 +208,30 @@
                 const csvText = await response.text();
                 const rows = csvText.split("\n").map(row => row.split(","));
 
-                //排序
-                // 忽略第一行表頭，提取數據行
-                const header = rows.shift(); // 保存表頭
+                // 排序邏輯
                 const sortedRows = rows.sort((a, b) => {
-                    // 取得「急件」和「更新時間」的索引
-                    const isUrgentA = a[5]?.replace(/"/g, "").trim() === "Y" ? 1 : 0; // 判斷急件
-                    const isUrgentB = b[5]?.replace(/"/g, "").trim() === "Y" ? 1 : 0;
+                    // 急件欄位索引為 5
+                    const isUrgentA = a[5]?.trim().toUpperCase() === "Y" ? 1 : 0;
+                    const isUrgentB = b[5]?.trim().toUpperCase() === "Y" ? 1 : 0;
 
-                    // 比較急件優先級
+                    // 比較急件優先級，急件排前面
                     if (isUrgentA !== isUrgentB) {
-                        return isUrgentB - isUrgentA; // 急件 (1) 排在前面
+                        return isUrgentB - isUrgentA;
                     }
 
-                    // 比較更新時間（G 欄，索引 6），按降序排列
-                    const timeA = new Date(a[6]?.replace(/"/g, "").trim());
-                    const timeB = new Date(b[6]?.replace(/"/g, "").trim());
-                    return timeB - timeA; // 更新時間新的排在前面
+                    // 更新時間欄位索引為 6
+                    const timeA = a[6]?.trim();
+                    const timeB = b[6]?.trim();
+
+                    // 比較更新時間，確保有效性
+                    if (timeA && timeB) {
+                        return new Date(timeB) - new Date(timeA); // 新的時間排前面
+                    } else if (timeA) {
+                        return -1; // 有更新時間的排前面
+                    } else if (timeB) {
+                        return 1; // 無更新時間的排後面
+                    }
+                    return 0; // 如果急件和更新時間都相同，不改變順序
                 });
 
                 // 加回表頭
