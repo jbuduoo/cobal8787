@@ -337,7 +337,7 @@
             for (let colIndex = 7; colIndex <= 13; colIndex++) {
                 const value = (row[colIndex] || "").replace(/"/g, "").trim();
                 const button = document.createElement("button");
-                button.textContent = columns[colIndex - 5];
+                button.textContent = columns[colIndex - 7];
                 // 新增 button99 class
                 button.classList.add("button99");
 
@@ -349,7 +349,7 @@
 
                 button.onclick = () => {
                     if (!button.disabled) {
-                        openModal(columns[colIndex - 5]);
+                        openModal(columns[colIndex - 7]);
                     }
                 };
 
