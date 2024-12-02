@@ -210,19 +210,19 @@
             <h3>填寫資料</h3>
             <form id="dataForm">
                 <label for="orderNumber">案件編號：</label>
-                <input type="text" id="orderNumber" name="entry.1495441973" required><br>
+                <input type="text" id="orderNumber" name="entry.1495441973" readonly><br>
                 <label for="item">工作項目：</label>
                 <input type="text" id="item" name="entry.609461637" readonly><br>
                 <label for="employee">處理人員：</label>
-                <input type="text" id="employee" name="entry.1735934499" required><br>
-                <label for="returns">回報事項：</label>
-                <input type="text" id="returns" name="entry.153807260" required><br>
+                <input type="text" id="employee" name="entry.1735934499" readonly><br>
                 <label for="isCompletion">是否完成：</label>
-                    <select id="returns" name="entry.499125338" required>
-                        <option value="處理中">處理中</option>
-                        <option value="已完成">已完成</option>
-                        <option value="有狀況">有狀況</option>
-                    </select><br>
+                <select id="returns" name="entry.499125338" required>
+                    <option value="處理中">處理中</option>
+                    <option value="已完成">已完成</option>
+                    <option value="有狀況">有狀況</option>
+                </select><br>
+                <label for="returns">回報事項：</label>
+                <textarea id="returns" name="entry.153807260" rows="3" required></textarea><br>
                 <div class="modal-buttons">
                     <button type="button" id="submitButton">提交</button>
                     <button type="button" id="closeButton">取消</button>
