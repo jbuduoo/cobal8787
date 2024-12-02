@@ -219,8 +219,8 @@
                 <input type="text" id="returns" name="entry.153807260" required><br>
                 <label for="isCompletion">是否完成：</label>
                     <select id="returns" name="entry.499125338" required>
-                        <option value="已完成">已完成</option>
                         <option value="處理中">處理中</option>
+                        <option value="已完成">已完成</option>
                         <option value="有狀況">有狀況</option>
                     </select><br>
                 <div class="modal-buttons">
@@ -368,7 +368,6 @@
             document.getElementById("item").value = operation;
             document.getElementById("employee").value = username;
             document.getElementById("returns").value = "";
-            document.getElementById("isCompletion").value = "處理中";
 
             // 綁定提交按鈕事件
             const submitButton = document.getElementById("submitButton");
