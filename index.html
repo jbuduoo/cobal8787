@@ -207,40 +207,19 @@
                 const response = await fetch(sheetCSVUrl);
                 const csvText = await response.text();
                 const rows = csvText.split("\n").map(row => row.split(",").map(cell => cell.replace(/"/g, "").trim()));
-                // 排序邏輯
-                const header = rows.shift(); // 保存表頭
-                const sortedRows = rows.sort((a, b) => {
-                    // 急件欄位索引為 5
-                    const isUrgentA = a[5]?.trim().toUpperCase() === "Y" ? 1 : 0;
-                    const isUrgentB = b[5]?.trim().toUpperCase() === "Y" ? 1 : 0;
 
-                    // 比較急件優先級，急件排前面
-                    if (isUrgentA !== isUrgentB) {
-                        return isUrgentB - isUrgentA;
-                    }
-
-                    // 更新時間欄位索引為 6
-                    const timeA = new Date(a[6]?.trim().replace(" ", "T")); // 確保格式 YYYY-MM-DDTHH:mm:ss
-                    const timeB = new Date(b[6]?.trim().replace(" ", "T"));
-
-                    // 排序有 `time` 欄位的資料
-                    if (timeA && timeB) {
-                        return timeB - timeA; // 按時間新到舊排序
-                    } else if (timeA) {
-                        return -1; // 有 `time` 的排在前
-                    } else if (timeB) {
-                        return 1; // 無 `time` 的排在後
-                    }
-
-                    return 0; // 如果急件和時間都相同，不改變順序
-                });
+                // 排序表格（不包括表頭）
+                var header = rows[0];
+                var body = rows.slice(1); // 排除表頭
+                var sortedRows = customSort(body);
 
                 // 加回表頭
                 sortedRows.unshift(header);
 
-                // 測試結果
+                // 測試輸出
                 console.log(sortedRows);
-                
+
+ 
 
                 if (rows && rows.length > 0) {
                     const customerList = document.getElementById('customer-list');
@@ -324,6 +303,43 @@
             } catch (error) {
                 console.error("讀取 Google Sheets 時發生錯誤:", error);
             }
+        }
+
+        // 排序邏輯
+        // 自己實現排序的邏輯，不使用 Array.sort()
+        function customSort(rows) {
+            for (var i = 0; i < rows.length - 1; i++) {
+                for (var j = i + 1; j < rows.length; j++) {
+                    var isUrgentA = rows[i][5] && rows[i][5].trim().toUpperCase() === "Y" ? 1 : 0;
+                    var isUrgentB = rows[j][5] && rows[j][5].trim().toUpperCase() === "Y" ? 1 : 0;
+
+                    // 比較急件，急件排在前面
+                    if (isUrgentB > isUrgentA) {
+                        var temp = rows[i];
+                        rows[i] = rows[j];
+                        rows[j] = temp;
+                        continue; // 跳過後續比較，繼續內部循環
+                    }
+
+                    // 如果急件相同，按更新時間降序排序
+                    var timeA = rows[i][6] ? new Date(rows[i][6].trim().replace(" ", "T")) : null;
+                    var timeB = rows[j][6] ? new Date(rows[j][6].trim().replace(" ", "T")) : null;
+
+                    if (isUrgentA === isUrgentB) {
+                        if (timeA && timeB && timeB > timeA) {
+                            var temp = rows[i];
+                            rows[i] = rows[j];
+                            rows[j] = temp;
+                        } else if (timeA === null && timeB !== null) {
+                            // 如果當前行沒有時間，但下一行有時間，交換位置
+                            var temp = rows[i];
+                            rows[i] = rows[j];
+                            rows[j] = temp;
+                        }
+                    }
+                }
+            }
+            return rows;
         }
 
     </script>
