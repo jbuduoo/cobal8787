@@ -224,15 +224,16 @@
                     const timeA = a[6]?.trim();
                     const timeB = b[6]?.trim();
 
-                    // 比較更新時間，確保有效性
+                    // 排序有 `time` 欄位的資料
                     if (timeA && timeB) {
-                        return new Date(timeB) - new Date(timeA); // 新的時間排前面
+                        return new Date(timeB) - new Date(timeA); // 按時間從新到舊排序
                     } else if (timeA) {
-                        return -1; // 有更新時間的排前面
+                        return -1; // 有 `time` 的排在前
                     } else if (timeB) {
-                        return 1; // 無更新時間的排後面
+                        return 1; // 無 `time` 的排在後
                     }
-                    return 0; // 如果急件和更新時間都相同，不改變順序
+
+                    return 0; // 如果急件和時間都相同，不改變順序
                 });
 
                 // 加回表頭
