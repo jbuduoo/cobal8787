@@ -135,26 +135,48 @@
     <script>
 
 
-        // 模擬帳號密碼資料
-        const validUser = {
-            username: "user",
-            password: "1234"
-        };
+        // 登入函式
+        async function login() {
+            try {
+                // 從輸入框獲取使用者輸入
+                const username = document.getElementById("username").value.trim();
+                const password = document.getElementById("password").value.trim();
 
-        function login() {
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+                // Google Sheets 的 CSV URL
+                const orderListSheetCSVUrl = "https://docs.google.com/spreadsheets/d/1NUpM67bAZEbe4IIfirzSS2LqAiJiqQLyLp2_voR5gj0/gviz/tq?tqx=out:csv&gid=1497606668";
 
-            if (username === validUser.username && password === validUser.password) {
-                const user = { name: username, loggedIn: true };
-                localStorage.setItem('user', JSON.stringify(user));
+                // 讀取 CSV 資料
+                const response = await fetch(orderListSheetCSVUrl);
+                const csvText = await response.text();
+                const rows = csvText
+                    .split("\n")
+                    .map(row => row.split(",").map(cell => cell.replace(/"/g, "").trim()));
 
-                document.getElementById("login-container").classList.add("hidden");
-                document.getElementById("homepage-container").classList.remove("hidden");
-                document.getElementById("logout-btn").classList.remove("hidden");
-                fetchGoogleSheetCSV();
-            } else {
-                alert("帳號或密碼錯誤！");
+                if (!rows || rows.length <= 1) {
+                    alert("無法讀取資料或資料為空！");
+                    return;
+                }
+
+                // 檢查使用者輸入
+                const userRow = rows.find(row => row[0] === username && row[1] === password);
+
+                if (userRow) {
+                    // 登入成功，儲存使用者資訊
+                    const user = { name: username, loggedIn: true };
+                    localStorage.setItem('user', JSON.stringify(user));
+
+                    // 顯示首頁並隱藏登入框
+                    document.getElementById("login-container").classList.add("hidden");
+                    document.getElementById("homepage-container").classList.remove("hidden");
+                    document.getElementById("logout-btn").classList.remove("hidden");
+
+                    // 執行其他需要的邏輯
+                    fetchGoogleSheetCSV();
+                } else {
+                    alert("帳號或密碼錯誤！");
+                }
+            } catch (error) {
+                console.error("讀取 Google Sheets 時發生錯誤:", error);
             }
         }
 
@@ -269,6 +291,7 @@
                 console.error("讀取 Google Sheets 時發生錯誤:", error);
             }
         }
+
     </script>
 </body>
 </html>
