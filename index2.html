@@ -356,23 +356,31 @@
             }
         }
 
-        function openModal(operation) {
+        function openModal(operation, manId, username) {
             const modal = document.getElementById("dataModal");
             const overlay = document.getElementById("modal-overlay");
+
+            // 顯示模態框與遮罩
             modal.style.display = "block";
             overlay.style.display = "block";
 
+            // 設置表單預設值
             document.getElementById("orderNumber").value = manId;
             document.getElementById("item").value = operation;
             document.getElementById("employee").value = username;
             document.getElementById("returns").value = "";
             document.getElementById("isCompletion").value = "";
-            document.getElementById("submitButton").onclick = () => submitData(operation);
+
+            // 綁定提交按鈕事件
+            const submitButton = document.getElementById("submitButton");
+            submitButton.onclick = () => submitData(operation);
         }
 
         function closeModal() {
             const modal = document.getElementById("dataModal");
             const overlay = document.getElementById("modal-overlay");
+
+            // 隱藏模態框與遮罩
             modal.style.display = "none";
             overlay.style.display = "none";
         }
@@ -382,6 +390,8 @@
         function submitData(operation) {
             const form = document.getElementById("dataForm");
             const formData = new FormData(form);
+
+            // 添加操作欄位
             formData.append("operation", operation);
 
             // 禁用提交按鈕並顯示「處理中」
@@ -389,23 +399,26 @@
             submitButton.disabled = true;
             submitButton.textContent = "處理中...";
 
+            // 發送表單資料
             fetch(scriptURL, {
                 method: "POST",
                 body: formData,
             })
-            .then(response => {
-                alert("表單已成功提交！");
-                form.reset();
-                location.reload(); // 提交後重新整理頁面
-            })
-            .catch(error => {
-                alert("提交失敗，請稍後再試！");
-                console.error("Error!", error.message);
-            })
-            .finally(() => {
-                submitButton.disabled = false;
-                submitButton.textContent = "提交"; // 恢復按鈕
-            });
+                .then(response => {
+                    if (!response.ok) throw new Error("網絡錯誤");
+                    alert("表單已成功提交！");
+                    form.reset(); // 重置表單
+                    closeModal(); // 關閉模態框
+                    location.reload(); // 提交後重新整理頁面
+                })
+                .catch(error => {
+                    alert("提交失敗，請稍後再試！");
+                    console.error("提交錯誤！", error);
+                })
+                .finally(() => {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "提交"; // 恢復按鈕狀態
+                });
         }
 
         document.getElementById("closeButton").addEventListener("click", closeModal);
@@ -424,7 +437,7 @@
             } else {
                 const userInfo = JSON.parse(user);
                 username = userInfo.name;
-                document.getElementById("user-name").textContent = userInfo.name;
+                //document.getElementById("user-name").textContent = userInfo.name;
             }
         };
 
