@@ -235,38 +235,52 @@
 
                         let font =''
                         //修改字的顏字
-                        if(row[7].replace(/"/g, "").trim().length > 0){
+                        if(row[7].replace(/"/g, "").trim().length > 1){
                             font += '<font color="#9900FF"> 1</font>';
+                        }else if (row[7].replace(/"/g, "").trim() === 'N'){
+                            font += '<font color="#e9f5f2"> 1</font>';
                         }else{
                             font += '1';
                         }
-                        if(row[8].replace(/"/g, "").trim().length > 0){
+                        if(row[8].replace(/"/g, "").trim().length > 1){
                             font += '<font color="#9900FF"> 2</font>';
+                        }else if (row[7].replace(/"/g, "").trim() === 'N'){
+                            font += '<font color="#e9f5f2"> 2</font>';
                         }else{
                             font += '2';
                         }
-                        if(row[9].replace(/"/g, "").trim().length > 0){
+                        if(row[9].replace(/"/g, "").trim().length > 1){
                             font += '<font color="#9900FF"> 3</font>';
+                        }else if (row[7].replace(/"/g, "").trim() === 'N'){
+                            font += '<font color="#e9f5f2"> 3</font>';
                         }else{
                             font += ' 3';
                         }
-                        if(row[10].replace(/"/g, "").trim().length > 0){
+                        if(row[10].replace(/"/g, "").trim().length > 1){
                             font += '<font color="#9900FF"> 4</font>';
+                        }else if (row[7].replace(/"/g, "").trim() === 'N'){
+                            font += '<font color="#e9f5f2"> 4</font>';
                         }else{
                             font += ' 4';
                         }
-                        if(row[11].replace(/"/g, "").trim().length > 0){
+                        if(row[11].replace(/"/g, "").trim().length > 1){
                             font += '<font color="#9900FF"> 5</font>';
+                        }else if (row[7].replace(/"/g, "").trim() === 'N'){
+                            font += '<font color="#e9f5f2"> 5</font>';
                         }else{
                             font += ' 5';
                         }
-                        if(row[12].replace(/"/g, "").trim().length > 0){
+                        if(row[12].replace(/"/g, "").trim().length > 1){
                             font += '<font color="#9900FF"> 6</font>';
+                        }else if (row[7].replace(/"/g, "").trim() === 'N'){
+                            font += '<font color="#e9f5f2"> 6</font>';
                         }else{
                             font += ' 6';
                         }
-                        if(row[13].replace(/"/g, "").trim().length > 0){
+                        if(row[13].replace(/"/g, "").trim().length > 1){
                             font += '<font color="#9900FF"> 7</font>';
+                        }else if (row[7].replace(/"/g, "").trim() === 'N'){
+                            font += '<font color="#e9f5f2"> 7</font>';
                         }else{
                             font += ' 7';
                         }
