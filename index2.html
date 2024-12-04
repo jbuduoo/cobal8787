@@ -341,9 +341,9 @@
                 // 新增 button99 class
                 button.classList.add("button99");
 
-                if (value === 'N') {
+                if (value === 'Y') {
                     button.disabled = true;
-                } else if (value) {
+                } else if (value.length > 2) {
                     button.textContent += `(${value})`;
                 }
 
