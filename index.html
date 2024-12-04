@@ -387,12 +387,10 @@
                                                 <p class="card-id">${row[4].replace(/"/g, "").trim()}</p>
                                                 <p class="card-name">${row[3].replace(/"/g, "").trim()}</p>
                                                 <p class="card-details">
-                                                <a href="#">${font}</a>
+                                                <a>${font}</a>
                                                 </p>
                                             </div>
                                             </div>`;
-
-
 
                         card.querySelector("img").addEventListener("click", () => {
                             const modal = document.getElementById("big-image-modal");
