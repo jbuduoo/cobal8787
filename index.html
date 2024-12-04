@@ -223,7 +223,7 @@
                     const customerList = document.getElementById('customer-list');
                     for (let i = 1; i < sortedRows.length; i++) { // 跳過表頭
                         let row = sortedRows[i];
-                        if (row.length < 6) continue; // 確保有足夠的欄位
+                        if (row.length < 3) continue; // 確保有足夠的欄位
 
                         let id = "";
                         if (row[1].includes('file/d/') && row[1].includes('/view?')) {
@@ -234,55 +234,66 @@
                         }
 
                         let font =''
-                        //修改字的顏字
-                        if(row[7].replace(/"/g, "").trim().length > 1){
-                            font += '<font color="#9900FF"> 1</font>';
-                        }else if (row[7].replace(/"/g, "").trim() === 'N'){
-                            font += '<font color="#e9f5f2"> 1</font>';
-                        }else{
-                            font += '1';
-                        }
+                        //修改字的顏色
                         if(row[8].replace(/"/g, "").trim().length > 1){
-                            font += '<font color="#9900FF"> 2</font>';
-                        }else if (row[8].replace(/"/g, "").trim() === 'N'){
-                            font += '<font color="#e9f5f2"> 2</font>';
-                        }else{
-                            font += '2';
+                            font += '<font color="#9900FF">布</font>';
+                        }else if (row[8].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">布</font>';
                         }
                         if(row[9].replace(/"/g, "").trim().length > 1){
-                            font += '<font color="#9900FF"> 3</font>';
-                        }else if (row[9].replace(/"/g, "").trim() === 'N'){
-                            font += '<font color="#e9f5f2"> 3</font>';
-                        }else{
-                            font += ' 3';
+                            font += '<font color="#9900FF">裁</font>';
+                        }else if (row[9].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">裁</font>';
                         }
                         if(row[10].replace(/"/g, "").trim().length > 1){
-                            font += '<font color="#9900FF"> 4</font>';
-                        }else if (row[10].replace(/"/g, "").trim() === 'N'){
-                            font += '<font color="#e9f5f2"> 4</font>';
-                        }else{
-                            font += ' 4';
+                            font += '<font color="#9900FF">料</font>';
+                        }else if (row[10].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">料</font>';
                         }
                         if(row[11].replace(/"/g, "").trim().length > 1){
-                            font += '<font color="#9900FF"> 5</font>';
-                        }else if (row[11].replace(/"/g, "").trim() === 'N'){
-                            font += '<font color="#e9f5f2"> 5</font>';
-                        }else{
-                            font += ' 5';
+                            font += '<font color="#9900FF">拆</font>';
+                        }else if (row[11].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">拆</font>';
                         }
                         if(row[12].replace(/"/g, "").trim().length > 1){
-                            font += '<font color="#9900FF"> 6</font>';
-                        }else if (row[12].replace(/"/g, "").trim() === 'N'){
-                            font += '<font color="#e9f5f2"> 6</font>';
-                        }else{
-                            font += ' 6';
+                            font += '<font color="#9900FF">名</font>';
+                        }else if (row[12].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">名</font>';
                         }
                         if(row[13].replace(/"/g, "").trim().length > 1){
-                            font += '<font color="#9900FF"> 7</font>';
-                        }else if (row[13].replace(/"/g, "").trim() === 'N'){
-                            font += '<font color="#e9f5f2"> 7</font>';
-                        }else{
-                            font += ' 7';
+                            font += '<font color="#9900FF">鴻</font>';
+                        }else if (row[13].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">鴻</font>';
+                        }
+                        if(row[14].replace(/"/g, "").trim().length > 1){
+                            font += '<font color="#9900FF">冠</font>';
+                        }else if (row[14].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">冠</font>';
+                        }
+                        if(row[15].replace(/"/g, "").trim().length > 1){
+                            font += '<font color="#9900FF">車</font>';
+                        }else if (row[15].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">車</font>';
+                        }
+                        if(row[16].replace(/"/g, "").trim().length > 1){
+                            font += '<font color="#9900FF">釦</font>';
+                        }else if (row[16].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">釦</font>';
+                        }
+                        if(row[17].replace(/"/g, "").trim().length > 1){
+                            font += '<font color="#9900FF">燙</font>';
+                        }else if (row[17].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">燙</font>';
+                        }
+                        if(row[18].replace(/"/g, "").trim().length > 1){
+                            font += '<font color="#9900FF">箱</font>';
+                        }else if (row[18].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">箱</font>';
+                        }
+                        if(row[19].replace(/"/g, "").trim().length > 1){
+                            font += '<font color="#9900FF">陸</font>';
+                        }else if (row[19].replace(/"/g, "").trim() === 'Y'){
+                            font += '<font color="#e9f5f2">陸</font>';
                         }
 
                         const card = document.createElement('div');
@@ -322,8 +333,8 @@
         function customSort(rows) {
             for (var i = 0; i < rows.length - 1; i++) {
                 for (var j = i + 1; j < rows.length; j++) {
-                    var isUrgentA = rows[i][5] && rows[i][5].trim().toUpperCase() === "Y" ? 1 : 0;
-                    var isUrgentB = rows[j][5] && rows[j][5].trim().toUpperCase() === "Y" ? 1 : 0;
+                    var isUrgentA = rows[i][6] && rows[i][6].trim().toUpperCase() === "Y" ? 1 : 0;
+                    var isUrgentB = rows[j][6] && rows[j][6].trim().toUpperCase() === "Y" ? 1 : 0;
 
                     // 比較急件，急件排在前面
                     if (isUrgentB > isUrgentA) {
@@ -334,8 +345,8 @@
                     }
 
                     // 如果急件相同，按更新時間降序排序
-                    var timeA = rows[i][6] ? new Date(rows[i][6].trim().replace(" ", "T")) : null;
-                    var timeB = rows[j][6] ? new Date(rows[j][6].trim().replace(" ", "T")) : null;
+                    var timeA = rows[i][7] ? new Date(rows[i][7].trim().replace(" ", "T")) : null;
+                    var timeB = rows[j][7] ? new Date(rows[j][7].trim().replace(" ", "T")) : null;
 
                     if (isUrgentA === isUrgentB) {
                         if (timeA && timeB && timeB > timeA) {

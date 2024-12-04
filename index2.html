@@ -263,10 +263,10 @@
                     }
 
                     let id = "";
-                    if (row[1] && row[1].includes('file/d/') && row[1].includes('/view?')) {
-                        const index = row[1].indexOf('file/d/') + 7;
-                        const index2 = row[1].indexOf('/view?');
-                        id = row[1].substring(index, index2);
+                    if (row[2] && row[2].includes('file/d/') && row[2].includes('/view?')) {
+                        const index = row[2].indexOf('file/d/') + 7;
+                        const index2 = row[2].indexOf('/view?');
+                        id = row[2].substring(index, index2);
                         id = `https://drive.google.com/thumbnail?id=${id}&sz=w860`;
                     }
 
@@ -330,14 +330,14 @@
 
 
         function generateButtons() {
-            const columns = ["叫布", "裁布", "物料", "LOGO工法", "車工", "打扣/整燙", "清點+裝箱"];
+            const columns = ["叫布", "裁布", "物料", "拆", "名軒","鴻昇","冠達","車工","釦子","整燙","清點+裝箱","大陸製作"];
             const buttonContainer = document.getElementById("button-container");
             buttonContainer.innerHTML = "";
 
-            for (let colIndex = 7; colIndex <= 13; colIndex++) {
+            for (let colIndex = 8; colIndex <= 19; colIndex++) {
                 const value = (row[colIndex] || "").replace(/"/g, "").trim();
                 const button = document.createElement("button");
-                button.textContent = columns[colIndex - 7];
+                button.textContent = columns[colIndex - 8];
                 // 新增 button99 class
                 button.classList.add("button99");
 
@@ -349,7 +349,7 @@
 
                 button.onclick = () => {
                     if (!button.disabled) {
-                        openModal(columns[colIndex - 7]);
+                        openModal(columns[colIndex - 8]);
                     }
                 };
 
