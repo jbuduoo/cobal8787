@@ -11,6 +11,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
         }
         .header {
             display: flex;
@@ -103,6 +105,74 @@
         .big-image-modal.active {
             visibility: visible; /* 讓模態框可見 */
             opacity: 1; /* 顯示模態框時的透明度 */
+        }
+
+        /* 卡片樣式 */
+        .card {
+        display: flex;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin: 10px 0;
+        background-color: #fff;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-image {
+        flex: 0 0 100px;
+        background-color: #4682b4; /* 假圖片顏色 */
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+        text-align: center;
+        border-right: 1px solid #ccc;
+        }
+
+        .card-content {
+        padding: 10px;
+        flex: 1;
+        }
+
+        .card-id {
+        font-weight: bold;
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+        }
+
+        .card-name {
+        margin: 5px 0;
+        font-size: 16px;
+        color: #555;
+        }
+
+        .card-details a {
+        text-decoration: none;
+        color: #007bff;
+        }
+
+        .card-details a:hover {
+        text-decoration: underline;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+        .card {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-image {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .card-content {
+            text-align: center;
+        }
         }
     </style>
 </head>
