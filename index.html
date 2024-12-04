@@ -358,10 +358,10 @@
                                                 <img src="${id}">
                                             </div>
                                             <div class="card-content">
-                                                <p class="card-id">${row[4].replace(/"/g, "").trim()}</p>
-                                                <p class="card-name">${row[3].replace(/"/g, "").trim()}</p>
+                                                <p class="card-id"><a href="index2.html?num=${row[0].replace(/"/g, "").trim()}">${row[4].replace(/"/g, "").trim()}</a></p>
+                                                <p class="card-name"><a href="index2.html?num=${row[0].replace(/"/g, "").trim()}">${row[3].replace(/"/g, "").trim()}</a></p>
                                                 <p class="card-details">
-                                                <a>${font}</a>
+                                                <a href="index2.html?num=${row[0].replace(/"/g, "").trim()}">${font}</a>
                                                 </p>
                                             </div>
                                             </div>`;
