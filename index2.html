@@ -345,6 +345,8 @@
                     button.disabled = true;
                 } else if (value.length > 2) {
                     button.textContent += `(${value})`;
+                }else{
+                    continue;
                 }
 
                 button.onclick = () => {
