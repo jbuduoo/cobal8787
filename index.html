@@ -118,6 +118,7 @@
         font-size: 14px;
         text-align: center;
         border-right: 1px solid #ccc;
+        width: 100%;
         }
 
         .card-content {
@@ -143,11 +144,7 @@
         color: #007bff;
         }
 
-        .card-image {
-            width: 100%;
-            border-right: none;
-            border-bottom: 1px solid #ccc;
-        }
+
     </style>
 </head>
 <body>
@@ -268,7 +265,7 @@
                     for (let i = 1; i < sortedRows.length; i++) { // 跳過表頭
                         let row = sortedRows[i];
                         if (row.length < 3) continue; // 確保有足夠的欄位
-
+                        if (row[3] == '') continue; 
                         let id = "";
                         if (row[1].includes('file/d/') && row[1].includes('/view?')) {
                             let index = row[1].indexOf('file/d/') + 7;
